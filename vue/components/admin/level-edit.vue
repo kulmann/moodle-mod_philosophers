@@ -12,14 +12,10 @@
                         .uk-form-controls
                             input.uk-input(v-model="data.name", :placeholder="strings.admin_level_lbl_name")
                     .uk-margin-small
-                        label.uk-form-label {{ strings.admin_level_lbl_score }}
+                        label.uk-form-label {{ strings.admin_level_lbl_color }}
                         .uk-form-controls
-                            input.uk-input(v-model="data.score", :placeholder="strings.admin_level_lbl_score")
-                    .uk-margin-small
-                        label.uk-form-label {{ strings.admin_level_lbl_safe_spot }}
-                        .uk-form-controls
-                            input(type="checkbox", v-model="data.safe_spot").uk-margin-small-right
-                            i(v-html="strings.admin_level_lbl_safe_spot_help")
+                            input.uk-input(v-model="data.color", :placeholder="strings.admin_level_lbl_color")
+                            i(v-html="strings.admin_level_lbl_color_help")
                     h3.uk-margin-large-top {{ strings.admin_level_lbl_categories }}
                     .uk-margin-small(v-for="(category, index) in categories", :key="index")
                         label.uk-form-label {{ strings.admin_level_lbl_category | stringParams(index + 1) }}
@@ -32,7 +28,7 @@
                                         v-html="mdl_category.category_name")
                                 button.btn.btn-default(type="button", @click="removeCategory(index)")
                                     v-icon(name="trash")
-                    btnAdd(@click="createCategory")
+                    btnAdd(@click="createCategory", align="left")
             .uk-card-footer.uk-text-right
                 button.btn.btn-primary(@click="save()", :disabled="saving")
                     v-icon(name="save").uk-margin-small-right
@@ -100,8 +96,8 @@
                         position: this.levels.length,
                         game: this.game.id,
                         name: '',
-                        score: 0,
-                        safe_spot: false,
+                        color: '',
+                        image: '',
                     };
                     this.categories = [];
                 } else {
@@ -136,8 +132,8 @@
                 let result = {
                     levelid: (this.data.id || 0),
                     name: this.data.name,
-                    score: this.data.score,
-                    safespot: this.data.safe_spot,
+                    color: this.data.color,
+                    image: this.data.image,
                     categories: categories,
                 };
                 this.saving = true;

@@ -345,8 +345,8 @@ class levels extends external_api {
             'coursemoduleid' => new external_value(PARAM_INT, 'course module id'),
             'levelid' => new external_value(PARAM_INT, 'the id of the level'),
             'name' => new external_value(PARAM_TEXT, 'name of the level'),
-            'score' => new external_value(PARAM_INT, 'score of the level'),
-            'safespot' => new external_value(PARAM_BOOL, 'whether or not the level is a safe spot'),
+            'color' => new external_value(PARAM_TEXT, 'the background color for level representation'),
+            'image' => new external_value(PARAM_TEXT, 'an image url for level representation'),
             'categories' => new external_multiple_structure(new external_single_structure([
                 'categoryid' => new external_value(PARAM_INT, 'the id in our category db table'),
                 'mdlcategory' => new external_value(PARAM_INT, 'the moodle category id'),
@@ -370,8 +370,8 @@ class levels extends external_api {
      * @param int $coursemoduleid
      * @param int $levelid
      * @param string $name
-     * @param int $score
-     * @param bool $safespot
+     * @param string $color
+     * @param string $image
      * @param array $categories
      *
      * @return stdClass
@@ -382,13 +382,13 @@ class levels extends external_api {
      * @throws moodle_exception
      * @throws restricted_context_exception
      */
-    public static function save_level($coursemoduleid, $levelid, $name, $score, $safespot, $categories) {
+    public static function save_level($coursemoduleid, $levelid, $name, $color, $image, $categories) {
         $params = [
             'coursemoduleid' => $coursemoduleid,
             'levelid' => $levelid,
             'name' => $name,
-            'score' => $score,
-            'safespot' => $safespot,
+            'color' => $color,
+            'image' => $image,
             'categories' => $categories,
         ];
         self::validate_parameters(self::save_level_parameters(), $params);
@@ -416,8 +416,8 @@ class levels extends external_api {
             $level->set_position($game->count_active_levels());
         }
         $level->set_name($name);
-        $level->set_score($score);
-        $level->set_safe_spot($safespot);
+        $level->set_color($color);
+        $level->set_image($image);
         $level->save();
 
         // transform provided $categories into category model instances.
