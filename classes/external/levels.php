@@ -106,6 +106,21 @@ class levels extends external_api {
         // get active levels from DB
         $levels = $game->get_active_levels();
 
+        // sort levels by the saved fixed order (if there is a gamesession)
+        if ($gamesession !== null) {
+            $level_ids = \explode(',', $gamesession->get_levels_order());
+            $sorted_levels = [];
+            foreach ($level_ids as $level_id) {
+                $level = \reset(\array_filter($levels, function(level $level) use ($level_id) {
+                    return $level_id == $level->get_id();
+                }));
+                if ($level) {
+                    $sorted_levels[] = $level;
+                }
+            }
+            $levels = $sorted_levels;
+        }
+
         // collect all already answered questions (if there is a gamesession)
         $questions_by_position = [];
         if ($gamesession !== null) {

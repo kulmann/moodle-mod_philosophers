@@ -232,7 +232,7 @@ class gamesessions extends external_api {
         return new external_function_parameters([
             'coursemoduleid' => new external_value(PARAM_INT, 'course module id'),
             'gamesessionid' => new external_value(PARAM_INT, 'game session id'),
-            'levelindex' => new external_value(PARAM_INT, 'index of the level'),
+            'levelid' => new external_value(PARAM_INT, 'id of the level'),
         ]);
     }
 
@@ -250,7 +250,7 @@ class gamesessions extends external_api {
      *
      * @param int $coursemoduleid
      * @param int $gamesessionid
-     * @param int $levelindex
+     * @param int $levelid
      *
      * @return stdClass
      * @throws dml_exception
@@ -258,11 +258,11 @@ class gamesessions extends external_api {
      * @throws moodle_exception
      * @throws restricted_context_exception
      */
-    public static function get_question($coursemoduleid, $gamesessionid, $levelindex) {
+    public static function get_question($coursemoduleid, $gamesessionid, $levelid) {
         $params = [
             'coursemoduleid' => $coursemoduleid,
             'gamesessionid' => $gamesessionid,
-            'levelindex' => $levelindex,
+            'levelid' => $levelid,
         ];
         self::validate_parameters(self::get_question_parameters(), $params);
 
@@ -279,7 +279,7 @@ class gamesessions extends external_api {
         util::validate_gamesession($game, $gamesession);
 
         // grab the requested level
-        $level = $gamesession->get_level_by_index($levelindex);
+        $level = util::get_level($levelid);
 
         // get question or create a new one if necessary.
         $question = $gamesession->get_question_by_level($level->get_id());
@@ -397,42 +397,21 @@ class gamesessions extends external_api {
         $question->set_mdl_answer_given($mdlanswerid);
         $question->set_finished(true);
         $question->set_correct($correct_mdl_answer->id == $mdlanswerid);
-        if ($gamesession->is_continue_on_failure()) {
-            // correct answer count gets updated later, so we have to manually increment if answer was correct.
-            $correct_answers = $gamesession->get_answers_correct();
-            if ($question->is_correct()) {
-                $correct_answers++;
-            }
-            // find the level that represents the reached score and set those points
-            if ($correct_answers === 0) {
-                $question->set_score(0);
-            } else {
-                $tmp_level = $gamesession->get_level_by_index($correct_answers - 1);
-                $question->set_score($tmp_level->get_score());
-            }
-        } else {
-            if ($question->is_correct()) {
-                $question->set_score($level->get_score());
-            } else {
-                // game over! find last reached safe spot and set those points
-                $safe_spot_level = $gamesession->find_reached_safe_spot_level();
-                $question->set_score($safe_spot_level->get_score());
-                $gamesession->set_state(gamesession::STATE_FINISHED);
-            }
+        if ($question->is_correct()) {
+            // TODO: points are to be calculated from (reading time + game->question_duration) - time taken.
+            $points = $game->get_question_duration();
+            $question->set_score($points);
         }
         $question->save();
 
         // update stats in the gamesession
-        $gamesession->set_score($question->get_score());
         $gamesession->increment_answers_total();
         if ($question->is_correct()) {
+            $gamesession->increase_score($question->get_score());
             $gamesession->increment_answers_correct();
         }
         if ($gamesession->get_answers_total() === $game->count_active_levels()) {
-            // set to finished
             $gamesession->set_state(gamesession::STATE_FINISHED);
-            // determine if user won
-            $gamesession->set_won($gamesession->is_continue_on_failure() || $question->is_correct());
         }
         $gamesession->save();
 

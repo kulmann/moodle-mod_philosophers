@@ -2,12 +2,12 @@
     #philosophers-question_singlechoice
         .uk-card.uk-card-default
             .uk-card-header(style="padding-top: 5px; padding-bottom: 5px;")
-                i.uk-h5 {{ strings.game_question_headline | stringParams({number: levelNumber, level: levelTitle}) }}
+                i.uk-h5 {{ levelName }}
             .uk-card-body
                 p._question(v-html="mdl_question.questiontext")
         vk-grid.uk-margin-top(matched)
             div(v-for="answer in mdl_answers", :key="answer.id", class="uk-width-1-1@s uk-width-1-2@m")
-                .uk-alert.uk-alert-default._answer(uk-alert, @click="selectAnswer(answer)", :class="getAnswerClasses(answer)")
+                .uk-alert.uk-alert-default._answer._pointer(uk-alert, @click="selectAnswer(answer)", :class="getAnswerClasses(answer)")
                     vk-grid.uk-grid-small
                         span.uk-width-auto.uk-text-bold {{ answer.label }}
                         span.uk-width-expand.uk-text-center(v-html="answer.answer")
@@ -50,24 +50,17 @@
             },
             level() {
                 if (this.question) {
-                    let questionIndex = this.question.index;
+                    let levelId = this.question.level;
                     return _.find(this.levels, function (level) {
-                        return level.position === questionIndex;
+                        return level.id === levelId;
                     });
                 } else {
                     return null;
                 }
             },
-            levelNumber() {
+            levelName() {
                 if (this.level) {
-                    return this.level.position + 1;
-                } else {
-                    return '';
-                }
-            },
-            levelTitle() {
-                if (this.level) {
-                    return this.level.title;
+                    return this.level.name;
                 } else {
                     return '';
                 }
@@ -89,10 +82,6 @@
                     // don't allow another submission if already answered
                     return;
                 }
-                if (this.isAnswerDisabled(answer)) {
-                    // don't allow selecting a disabled answer
-                    return;
-                }
                 this.mostRecentQuestionId = this.question.id;
                 this.clickedAnswerId = answer.id;
                 this.submitAnswer({
@@ -103,9 +92,6 @@
             },
             getAnswerClasses(answer) {
                 let result = [];
-                if (this.isAnswerDisabled(answer)) {
-                    result.push('uk-alert-danger');
-                }
                 if (this.isAnyAnswerGiven) {
                     if (this.isCorrectAnswer(answer)) {
                         result.push('uk-alert-success');
@@ -116,8 +102,6 @@
                             result.push('uk-alert-danger');
                         }
                     }
-                } else if (!this.isAnswerDisabled(answer) && !this.isGameOver) {
-                    result.push('_pointer');
                 }
                 return result.join(' ');
             },

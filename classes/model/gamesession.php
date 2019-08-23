@@ -83,7 +83,7 @@ class gamesession extends abstract_model {
         $this->score = 0;
         $this->answers_total = 0;
         $this->answers_correct = 0;
-        $this->state = 'progress';
+        $this->state = self::STATE_PROGRESS;
         $this->levels_order = '';
     }
 
@@ -106,7 +106,7 @@ class gamesession extends abstract_model {
         $this->score = isset($data['score']) ? $data['score'] : 0;
         $this->answers_total = isset($data['answers_total']) ? $data['answers_total'] : 0;
         $this->answers_correct = isset($data['answers_correct']) ? $data['answers_correct'] : 0;
-        $this->state = isset($data['state']) ? $data['state'] : 'progress';
+        $this->state = isset($data['state']) ? $data['state'] : self::STATE_PROGRESS;
         $this->levels_order = isset($data['levels_order']) ? $data['levels_order'] : '';
     }
 
@@ -133,77 +133,6 @@ class gamesession extends abstract_model {
         $question = new question();
         $question->load_data_by_id($most_recent_question->id);
         return $question;
-    }
-
-    /**
-     * If this gamesession is not finished, this function returns the smallest unfinished level.
-     *
-     * @return level|null
-     * @throws \dml_exception
-     */
-    public function get_current_level() {
-        if ($this->is_finished()) {
-            return null;
-        }
-        $most_recent_question = $this->get_most_recent_question();
-        if ($most_recent_question === null) {
-            return $this->get_level_by_index(0);
-        }
-        $current_level = util::get_level($most_recent_question->get_level());
-        if ($most_recent_question->is_finished()) {
-            // return next level
-            return $this->get_level_by_index($current_level->get_position() + 1);
-        } else {
-            // return this level, as it isn't finished yet
-            return $current_level;
-        }
-    }
-
-    /**
-     * Gets the level for this game, which matches the given $index.
-     *
-     * @param int $index
-     *
-     * @return level
-     * @throws \dml_exception
-     */
-    public function get_level_by_index($index): level {
-        global $DB;
-        $level = new level();
-        $record = $DB->get_record_select($level->get_table_name(), 'game = :game AND position = :position', ['game' => $this->get_game(), 'position' => $index]);
-        if ($record === false) {
-            throw new \dml_exception('There is no level with position=' . $index . ' for the game with id ' . $this->get_game());
-        }
-        $level->apply($record);
-        return $level;
-    }
-
-    /**
-     * Returns the highest reached safe spot level. Returns null if no safe spot was reached.
-     *
-     * @return level
-     * @throws \dml_exception
-     */
-    public function find_reached_safe_spot_level(): level {
-        global $DB;
-        $sql = "
-            SELECT l.id
-              FROM {philosophers_levels} AS l
-        INNER JOIN {philosophers_questions} AS q on l.id=q.level
-             WHERE l.game = :game AND q.gamesession = :gamesession AND l.safe_spot = :safe_spot
-          ORDER BY l.position DESC
-        ";
-        $levels = $DB->get_records_sql($sql, ['game' => $this->get_game(), 'gamesession' => $this->get_id(), 'safe_spot' => true]);
-        $level = new level();
-        if ($levels === false || empty($levels)) {
-            $level->set_game($this->get_game());
-            $level->set_safe_spot(true);
-            $level->set_score(0);
-            return $level;
-        }
-        $highest = \array_shift($levels);
-        $level->load_data_by_id($highest->id);
-        return $level;
     }
 
     /**
@@ -310,6 +239,13 @@ class gamesession extends abstract_model {
      */
     public function set_score(int $score) {
         $this->score = $score;
+    }
+
+    /**
+     * @param int $delta
+     */
+    public function increase_score(int $delta) {
+        $this->score += $delta;
     }
 
     /**

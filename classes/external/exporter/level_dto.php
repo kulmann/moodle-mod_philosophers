@@ -82,9 +82,13 @@ class level_dto extends exporter {
                 'type' => PARAM_TEXT,
                 'description' => 'name of the level',
             ],
-            'position' => [
-                'type' => PARAM_INT,
-                'description' => 'order of the levels within a game session is defined by their indices.'
+            'color' => [
+                'type' => PARAM_TEXT,
+                'description' => 'background color hex code for level representation',
+            ],
+            'image' => [
+                'type' => PARAM_TEXT,
+                'description' => 'background image for level representation',
             ],
             'finished' => [
                 'type' => PARAM_BOOL,
@@ -94,7 +98,7 @@ class level_dto extends exporter {
                 'type' => PARAM_BOOL,
                 'description' => 'whether or not the question for this level was answered correctly',
             ],
-            'reached_score' => [
+            'score' => [
                 'type' => PARAM_INT,
                 'description' => 'the score that was reached by answering this question',
             ],
@@ -117,7 +121,7 @@ class level_dto extends exporter {
             [
                 'finished' => $this->question ? $this->question->is_finished() : false,
                 'correct' => $this->question ? $this->question->is_correct() : false,
-                'reached_score' => $this->question ? $this->question->get_score() : -1,
+                'score' => $this->question ? $this->question->get_score() : 0,
                 'seen' => $this->question !== null,
             ]
         );

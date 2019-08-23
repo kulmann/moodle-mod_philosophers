@@ -46,6 +46,7 @@ class question_dto extends exporter {
      * question_dto constructor.
      *
      * @param question $question
+     * @param level $level
      * @param context $context
      *
      * @throws \coding_exception
@@ -61,10 +62,6 @@ class question_dto extends exporter {
             'id' => [
                 'type' => PARAM_INT,
                 'description' => 'question id',
-            ],
-            'index' => [
-                'type' => PARAM_INT,
-                'description' => 'index of the level',
             ],
             'timecreated' => [
                 'type' => PARAM_INT,
@@ -86,7 +83,7 @@ class question_dto extends exporter {
                 'type' => PARAM_INT,
                 'description' => 'id of the moodle question instance',
             ],
-            'mdl_answer' => [
+            'mdl_answer_given' => [
                 'type' => PARAM_INT,
                 'description' => 'id of the moodle answer the user has chosen',
             ],
@@ -124,7 +121,6 @@ class question_dto extends exporter {
         return \array_merge(
             $this->question->to_array(),
             [
-                'index' => $this->level->get_position(),
                 'mdl_question_id' => $mdl_question->id,
                 'mdl_question_type' => \get_class($mdl_question),
             ]

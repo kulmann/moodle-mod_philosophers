@@ -277,15 +277,15 @@ class game extends abstract_model {
     /**
      * @return int
      */
-    public function get_question_score(): int {
-        return $this->question_score;
+    public function get_question_duration(): int {
+        return $this->question_duration;
     }
 
     /**
-     * @param int $question_score
+     * @param int $question_duration
      */
-    public function set_question_score(int $question_score) {
-        $this->question_score = $question_score;
+    public function set_question_duration(int $question_duration) {
+        $this->question_duration = $question_duration;
     }
 
     /**

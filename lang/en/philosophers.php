@@ -116,7 +116,6 @@ $string['game_btn_stats'] = 'Leader Board';
 $string['game_btn_quit'] = 'Quit';
 $string['game_btn_start'] = 'Start Game';
 $string['game_btn_game'] = 'Show Game';
-$string['game_question_headline'] = 'Question {$a->number}: {$a->level}';
 $string['game_won_headline'] = 'You won!';
 $string['game_lost_headline'] = 'Sorry, you lost.';
 $string['game_over_score'] = 'You reached a score of {$a}';

@@ -76,9 +76,9 @@ export const store = new Vuex.Store({
                 console.error("omitted invalid game mode " + gameMode + ".");
             }
         },
-        markLevelAsSeen(state, levelIndex) {
+        markLevelAsSeen(state, levelId) {
             let level = _.find(state.levels, function (level) {
-                return level.position === levelIndex;
+                return level.id === levelId;
             });
             if(level) {
                 level.seen = true;
@@ -100,16 +100,13 @@ export const store = new Vuex.Store({
                     context.dispatch('loadComponentStrings'),
                     context.dispatch('fetchGame'),
                     context.dispatch('fetchGameSession').then(() => {
-                        let highestSeenLevel = mixins.methods.findHighestSeenLevel(context.state.levels);
-                        if (highestSeenLevel !== null && highestSeenLevel.seen) {
-                            // the game was obviously already started. So fetch the last seen question.
-                            context.dispatch('showQuestionForLevel', highestSeenLevel.position).then(() => {
-                                if (context.state.question.finished) {
-                                    context.commit('setGameMode', MODE_LEVELS);
-                                } else {
-                                    context.commit('setGameMode', MODE_QUESTION);
-                                }
-                            });
+                        let unfinishedLevel = mixins.methods.findUnfinishedLevel(context.state.levels);
+                        if (unfinishedLevel !== null) {
+                            // the page was reloaded with an unfinished level. Load that exact level again.
+                            context.dispatch('showQuestionForLevel', unfinishedLevel.id);
+                        } else {
+                            // there is no unfinished level. Show the level overview.
+                            context.commit('setGameMode', MODE_LEVELS);
                         }
                     }),
                 ]).then(() => {
@@ -231,13 +228,13 @@ export const store = new Vuex.Store({
          * Loads the question for the given level index. Doesn't matter if it's already answered.
          *
          * @param context
-         * @param levelIndex
+         * @param levelId
          *
          * @returns {Promise<void>}
          */
-        async showQuestionForLevel(context, levelIndex) {
-            return context.dispatch('fetchQuestion', levelIndex).then(() => {
-                context.commit('markLevelAsSeen', levelIndex);
+        async showQuestionForLevel(context, levelId) {
+            return context.dispatch('fetchQuestion', levelId).then(() => {
+                context.commit('markLevelAsSeen', levelId);
                 context.commit('setGameMode', MODE_QUESTION);
             });
         },
@@ -329,14 +326,14 @@ export const store = new Vuex.Store({
          * Fetches the question, moodle question and moodle answers for the given level index.
          *
          * @param context
-         * @param levelIndex
+         * @param levelId
          *
          * @returns {Promise<void>}
          */
-        async fetchQuestion(context, levelIndex) {
+        async fetchQuestion(context, levelId) {
             let args = {
                 gamesessionid: this.state.gameSession.id,
-                levelindex: levelIndex
+                levelid: levelId
             };
             const question = await ajax('mod_philosophers_get_question', args);
             if (question.id === 0) {

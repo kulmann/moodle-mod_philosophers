@@ -8,8 +8,9 @@
 </template>
 
 <script>
-    import {mapActions, mapState} from 'vuex';
+    import {mapMutations, mapState} from 'vuex';
     import mixins from '../../mixins';
+    import {MODE_LEVELS} from "../../constants";
 
     export default {
         mixins: [mixins],
@@ -20,11 +21,11 @@
             ]),
         },
         methods: {
-            ...mapActions([
-                'showQuestionForLevel'
+            ...mapMutations([
+                'setGameMode'
             ]),
             startGame() {
-                this.showQuestionForLevel(0);
+                this.setGameMode(MODE_LEVELS);
             }
         }
     }

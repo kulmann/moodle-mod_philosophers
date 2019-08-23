@@ -3,7 +3,6 @@
         template(v-if="question")
             loadingAlert(v-if="mdl_question === null", :message="strings.game_loading_question")
             template(v-else)
-                finished(v-if="isGameFinished")
                 div(:is="componentByType", :levels="levels", :gameSession="gameSession", :question="question", :mdl_question="mdl_question", :mdl_answers="mdl_answers")
                 actions(v-if="areActionsAllowed").uk-margin-small-top
         .uk-alert.uk-alert-primary(uk-alert, v-else)
@@ -40,21 +39,8 @@
                         return 'error';
                 }
             },
-            highestSeenLevel() {
-                return this.findHighestSeenLevel(this.levels);
-            },
-            isCurrentQuestion() {
-                return this.highestSeenLevel !== null && this.highestSeenLevel.position === this.question.index;
-            },
-            isGameOver() {
-                return this.gameSession.state !== GAME_PROGRESS;
-            },
-            isGameFinished() {
-                return this.gameSession.state === GAME_FINISHED;
-            },
             areActionsAllowed() {
-                return !(!this.isCurrentQuestion || this.isGameOver);
-
+                return this.question.finished;
             }
         },
         components: {

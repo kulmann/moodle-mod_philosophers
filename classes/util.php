@@ -36,7 +36,7 @@ class util {
      * @return bool
      * @throws \coding_exception
      */
-    public static function user_has_capability(string $capability, \context $context, $userid = null) : bool {
+    public static function user_has_capability(string $capability, \context $context, $userid = null): bool {
         return \has_capability($capability, $context, $userid);
     }
 
@@ -227,6 +227,13 @@ class util {
         $gamesession = new gamesession();
         $gamesession->set_game($game->get_id());
         $gamesession->set_mdl_user($USER->id);
+        $level_ids = \array_map(function (level $level) {
+            return $level->get_id();
+        }, $game->get_active_levels());
+        if ($game->is_shuffle_levels()) {
+            \shuffle($level_ids);
+        }
+        $gamesession->set_levels_order(implode(',', $level_ids));
         $gamesession->save();
         return $gamesession;
     }
