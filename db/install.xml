@@ -51,8 +51,10 @@
                        DEFAULT="0"/>
                 <FIELD NAME="image" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"
                        COMMENT="The url of the image of the topic."/>
-                <FIELD NAME="color" TYPE="char" LENGTH="7" NOTNULL="false" SEQUENCE="false"
-                       COMMENT="The color code for the topic."/>
+                <FIELD NAME="bgcolor" TYPE="char" LENGTH="7" NOTNULL="false" SEQUENCE="false"
+                       COMMENT="The background color code for the level."/>
+                <FIELD NAME="fgcolor" TYPE="char" LENGTH="7" NOTNULL="false" SEQUENCE="false"
+                       COMMENT="The foreground color code for the level."/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

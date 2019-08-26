@@ -360,7 +360,8 @@ class levels extends external_api {
             'coursemoduleid' => new external_value(PARAM_INT, 'course module id'),
             'levelid' => new external_value(PARAM_INT, 'the id of the level'),
             'name' => new external_value(PARAM_TEXT, 'name of the level'),
-            'color' => new external_value(PARAM_TEXT, 'the background color for level representation'),
+            'bgcolor' => new external_value(PARAM_TEXT, 'the background color for level representation'),
+            'fgcolor' => new external_value(PARAM_TEXT, 'the foreground color for level representation'),
             'image' => new external_value(PARAM_TEXT, 'an image url for level representation'),
             'categories' => new external_multiple_structure(new external_single_structure([
                 'categoryid' => new external_value(PARAM_INT, 'the id in our category db table'),
@@ -385,7 +386,8 @@ class levels extends external_api {
      * @param int $coursemoduleid
      * @param int $levelid
      * @param string $name
-     * @param string $color
+     * @param string $bgcolor
+     * @param string $fgcolor
      * @param string $image
      * @param array $categories
      *
@@ -397,12 +399,13 @@ class levels extends external_api {
      * @throws moodle_exception
      * @throws restricted_context_exception
      */
-    public static function save_level($coursemoduleid, $levelid, $name, $color, $image, $categories) {
+    public static function save_level($coursemoduleid, $levelid, $name, $bgcolor, $fgcolor, $image, $categories) {
         $params = [
             'coursemoduleid' => $coursemoduleid,
             'levelid' => $levelid,
             'name' => $name,
-            'color' => $color,
+            'bgcolor' => $bgcolor,
+            'fgcolor' => $fgcolor,
             'image' => $image,
             'categories' => $categories,
         ];
@@ -431,7 +434,8 @@ class levels extends external_api {
             $level->set_position($game->count_active_levels());
         }
         $level->set_name($name);
-        $level->set_color($color);
+        $level->set_bgcolor($bgcolor);
+        $level->set_fgcolor($fgcolor);
         $level->set_image($image);
         $level->save();
 

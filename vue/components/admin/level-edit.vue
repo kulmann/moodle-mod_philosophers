@@ -12,10 +12,15 @@
                         .uk-form-controls
                             input.uk-input(v-model="data.name", :placeholder="strings.admin_level_lbl_name")
                     .uk-margin-small
-                        label.uk-form-label {{ strings.admin_level_lbl_color }}
+                        label.uk-form-label {{ strings.admin_level_lbl_bgcolor }}
                         .uk-form-controls
-                            input.uk-input(v-model="data.color", :placeholder="strings.admin_level_lbl_color")
-                            i(v-html="strings.admin_level_lbl_color_help")
+                            input.uk-input(v-model="data.bgcolor", :placeholder="strings.admin_level_lbl_bgcolor")
+                            i(v-html="strings.admin_level_lbl_bgcolor_help")
+                    .uk-margin-small
+                        label.uk-form-label {{ strings.admin_level_lbl_fgcolor }}
+                        .uk-form-controls
+                            input.uk-input(v-model="data.fgcolor", :placeholder="strings.admin_level_lbl_fgcolor")
+                            i(v-html="strings.admin_level_lbl_fgcolor_help")
                     h3.uk-margin-large-top {{ strings.admin_level_lbl_categories }}
                     .uk-margin-small(v-for="(category, index) in categories", :key="index")
                         label.uk-form-label {{ strings.admin_level_lbl_category | stringParams(index + 1) }}
@@ -96,7 +101,8 @@
                         position: this.levels.length,
                         game: this.game.id,
                         name: '',
-                        color: '',
+                        bgcolor: '',
+                        fgcolor: '',
                         image: '',
                     };
                     this.categories = [];
@@ -132,7 +138,8 @@
                 let result = {
                     levelid: (this.data.id || 0),
                     name: this.data.name,
-                    color: this.data.color,
+                    bgcolor: this.data.bgcolor,
+                    fgcolor: this.data.fgcolor,
                     image: this.data.image,
                     categories: categories,
                 };

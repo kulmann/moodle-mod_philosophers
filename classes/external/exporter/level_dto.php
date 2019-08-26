@@ -82,9 +82,17 @@ class level_dto extends exporter {
                 'type' => PARAM_TEXT,
                 'description' => 'name of the level',
             ],
-            'color' => [
+            'position' => [
+                'type' => PARAM_INT,
+                'description' => 'order of the levels within a game session is defined by their indices.'
+            ],
+            'bgcolor' => [
                 'type' => PARAM_TEXT,
                 'description' => 'background color hex code for level representation',
+            ],
+            'fgcolor' => [
+                'type' => PARAM_TEXT,
+                'description' => 'foreground color hex code for level representation',
             ],
             'image' => [
                 'type' => PARAM_TEXT,

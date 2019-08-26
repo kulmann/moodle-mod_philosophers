@@ -1,8 +1,19 @@
 <template lang="pug">
     vk-grid.uk-margin-top(matched)
-        div(v-for="level in levels", :key="level.id", class="uk-width-1-1@s uk-width-1-2@m", :class="getLevelClasses(level)")
-            .uk-alert.uk-alert-default.uk-text-center.level(uk-alert, @click="selectLevel(level)", :style="getLevelStyles(level)", :class="{'_pointer': !isDone(level)}")
-                b {{ level.name }}
+        div(v-for="level in levels", :key="level.id", class="uk-width-1-1@s uk-width-1-2@m")
+            .level-wrapper(:class="getLevelWrapperClass(level)")
+                .uk-text-center.level(@click="selectLevel(level)", :style="getLevelStyles(level)", :class="{'_pointer': !isDone(level)}")
+                    vk-grid.uk-grid-small.uk-flex-middle
+                        .uk-width-auto
+                            v-icon(v-if="getLevelIcon(level)", :name="getLevelIcon(level)", scale="1.5")
+                        .uk-width-expand.uk-text-center
+                            template(v-if="level.seen")
+                                b {{ level.name }}
+                                br
+                                span.done(v-if="level.score === 1") {{ strings.game_stats_point | stringParams(1) }}
+                                span.done(v-else) {{ strings.game_stats_points | stringParams(level.score) }}
+                            b.open(v-else) {{ level.name }}
+
 </template>
 
 <script>
@@ -24,22 +35,41 @@
             ...mapActions([
                 'showQuestionForLevel',
             ]),
-            getLevelClasses(level) {
-                let classes = [];
-                // bg color for lost/won levels
-                if (this.isLost(level)) {
-                    classes.push('level-lost');
-                } else if (this.isWon(level)) {
-                    classes.push('level-won');
+            getLevelWrapperClass(level) {
+                if (this.isDone(level)) {
+                    if (level.correct) {
+                        return 'level-won';
+                    } else {
+                        return 'level-lost';
+                    }
+                } else {
+                    return 'level-pending';
                 }
-                return classes.join(' ');
+            },
+            getLevelIcon(level) {
+                if (level.finished) {
+                    if (level.correct) {
+                        return "regular/check-circle";
+                    } else {
+                        return "regular/times-circle"
+                    }
+                }
+                return null;
             },
             getLevelStyles(level) {
                 let styles = [];
-                // bg color
-                if (level.color) {
-                    styles.push('background-color: ' + level.color + ';');
+                styles.push('height: 100%;');
+                // fg color
+                if (level.fgcolor) {
+                    styles.push('color: ' + level.fgcolor + ';');
+                } else {
+                    styles.push('color: #666;');
                 }
+                // bg color
+                if (level.bgcolor) {
+                    styles.push('background-color: ' + level.bgcolor + ';');
+                }
+                // bg image
                 if (level.image) {
                     styles.push('background-image: url(' + level.image + ');');
                     styles.push('background-size: cover;');
@@ -52,12 +82,6 @@
             isDone(level) {
                 return level.finished;
             },
-            isWon(level) {
-                return this.isDone(level) && level.correct;
-            },
-            isLost(level) {
-                return this.isDone(level) && !level.correct;
-            },
             selectLevel(level) {
                 if (!this.isDone(level)) {
                     this.showQuestionForLevel(level.id);
@@ -69,19 +93,31 @@
 
 <style lang="scss" scoped>
     .level-wrapper {
-        padding: 5px;
+        padding: 2px;
+        border-radius: 10px;
     }
 
     .level-won {
-        background-color: #edfbf6;
+        background-color: #aeedd7;
+        border: 1px solid #6fdfb8;
     }
 
     .level-lost {
-        background-color: #fef4f6;
+        background-color: #f8aebd;
+        border: 1px solid #f26884;
+    }
+
+    .level-pending {
+        background-color: #f4dc7f;
+        border: 1px solid #f2d668;
     }
 
     .level {
-        border-bottom-left-radius: 15px;
-        border-top-right-radius: 15px;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    .open {
+        font-size: 1.1em;
     }
 </style>

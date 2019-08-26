@@ -54,7 +54,11 @@ class level extends abstract_model {
     /**
      * @var string The hex code of the bg color of the level.
      */
-    protected $color;
+    protected $bgcolor;
+    /**
+     * @var string The hex code of the fg color of the level.
+     */
+    protected $fgcolor;
 
     /**
      * level constructor.
@@ -66,7 +70,8 @@ class level extends abstract_model {
         $this->name = '';
         $this->position = -1;
         $this->image = '';
-        $this->color = '#ccc';
+        $this->bgcolor = '#ccc';
+        $this->fgcolor = '#000';
     }
 
     /**
@@ -86,7 +91,8 @@ class level extends abstract_model {
         $this->name =  isset($data['name']) ? $data['name'] : '';
         $this->position = isset($data['position']) ? $data['position'] : 0;
         $this->image = isset($data['image']) ? $data['image'] : '';
-        $this->color = isset($data['color']) ? $data['color'] : '#ccc';
+        $this->bgcolor = isset($data['bgcolor']) ? $data['bgcolor'] : '#ccc';
+        $this->fgcolor = isset($data['fgcolor']) ? $data['fgcolor'] : '#000';
     }
 
     /**
@@ -211,21 +217,41 @@ class level extends abstract_model {
     /**
      * @param string $image
      */
-    public function set_image(string $image): void {
+    public function set_image(string $image) {
         $this->image = $image;
     }
 
     /**
      * @return string
      */
-    public function get_color(): string {
-        return $this->color;
+    public function get_bgcolor(): string {
+        return $this->bgcolor;
     }
 
     /**
-     * @param string $color
+     * @param string $bgcolor
      */
-    public function set_color(string $color): void {
-        $this->color = $color;
+    public function set_bgcolor(string $bgcolor) {
+        $this->bgcolor = $this->to_valid_hex_string($bgcolor);
+    }
+
+    /**
+     * @return string
+     */
+    public function get_fgcolor(): string {
+        return $this->fgcolor;
+    }
+
+    /**
+     * @param string $fgcolor
+     */
+    public function set_fgcolor(string $fgcolor) {
+        $this->fgcolor = $this->to_valid_hex_string($fgcolor);
+    }
+
+    private function to_valid_hex_string(string $color) {
+        $color = \str_replace('#', '', $color);
+        return '#' . $color;
+
     }
 }
