@@ -112,6 +112,7 @@
                        COMMENT="Whether (1) or not (0) the selected answer was correct."/>
                 <FIELD NAME="finished" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" DEFAULT="0"
                        COMMENT="Whether (1) or not (0) the user has has answered this question."/>
+                <FIELD NAME="timeremaining" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" DEFAULT="-1"/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

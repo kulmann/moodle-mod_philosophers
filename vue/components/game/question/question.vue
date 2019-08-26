@@ -16,7 +16,6 @@
     import questionActions from './question-actions';
     import questionError from './question-error';
     import questionSingleChoice from './question-singlechoice';
-    import {GAME_FINISHED, GAME_PROGRESS} from "../../../constants";
     import loadingAlert from '../../helper/loading-alert';
 
     export default {

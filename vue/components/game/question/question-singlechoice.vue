@@ -2,12 +2,16 @@
     #philosophers-question_singlechoice
         .uk-card.uk-card-default
             .uk-card-header(style="padding-top: 5px; padding-bottom: 5px;")
-                i.uk-h5 {{ levelName }}
+                vk-grid(matched)
+                    .uk-width-expand
+                        i.uk-h5 {{ levelName }}
+                    .uk-width-auto
+                        questionTimer(:question="question")
             .uk-card-body
                 p._question(v-html="mdl_question.questiontext")
         vk-grid.uk-margin-top(matched)
             div(v-for="answer in mdl_answers", :key="answer.id", class="uk-width-1-1@s uk-width-1-2@m")
-                .uk-alert.uk-alert-default._answer._pointer(uk-alert, @click="selectAnswer(answer)", :class="getAnswerClasses(answer)")
+                .uk-alert.uk-alert-default._answer(uk-alert, @click="selectAnswer(answer)", :class="getAnswerClasses(answer)")
                     vk-grid.uk-grid-small
                         span.uk-width-auto.uk-text-bold {{ answer.label }}
                         span.uk-width-expand.uk-text-center(v-html="answer.answer")
@@ -19,6 +23,7 @@
     import VkGrid from "vuikit/src/library/grid/components/grid";
     import _ from 'lodash';
     import {GAME_PROGRESS} from "../../../constants";
+    import questionTimer from "./question-timer";
 
     export default {
         mixins: [mixins],
@@ -45,8 +50,11 @@
                 });
                 return correct ? correct.id : null;
             },
+            isFinished() {
+                return this.clickedAnswerId !== null || this.question.finished;
+            },
             isAnyAnswerGiven() {
-                return this.clickedAnswerId !== null;
+                return this.clickedAnswerId !== null || this.question.finished;
             },
             level() {
                 if (this.question) {
@@ -78,7 +86,7 @@
                     // don't allow another submission if game is over
                     return;
                 }
-                if (this.isAnyAnswerGiven) {
+                if (this.isFinished) {
                     // don't allow another submission if already answered
                     return;
                 }
@@ -92,7 +100,7 @@
             },
             getAnswerClasses(answer) {
                 let result = [];
-                if (this.isAnyAnswerGiven) {
+                if (this.isFinished) {
                     if (this.isCorrectAnswer(answer)) {
                         result.push('uk-alert-success');
                     }
@@ -102,11 +110,13 @@
                             result.push('uk-alert-danger');
                         }
                     }
+                } else {
+                    result.push('_pointer');
                 }
                 return result.join(' ');
             },
             isClickedAnswer(answer) {
-                return this.isAnyAnswerGiven && this.clickedAnswerId === answer.id;
+                return this.isFinished && this.clickedAnswerId === answer.id;
             },
             isWrongAnswer(answer) {
                 return this.correctAnswerId !== answer.id;
@@ -116,7 +126,7 @@
             },
             initQuestion() {
                 this.mostRecentQuestionId = this.question.id;
-                this.clickedAnswerId = (this.question.mdl_answer > 0) ? this.question.mdl_answer : null;
+                this.clickedAnswerId = (this.question.mdl_answer_given > 0) ? this.question.mdl_answer_given : null;
             },
         },
         mounted() {
@@ -132,7 +142,8 @@
             }
         },
         components: {
-            VkGrid
+            VkGrid,
+            questionTimer
         }
     }
 </script>

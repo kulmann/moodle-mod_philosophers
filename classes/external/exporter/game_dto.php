@@ -89,6 +89,14 @@ class game_dto extends exporter {
                 'type' => PARAM_BOOL,
                 'description' => 'whether or not the logged in user has game editing capabilities',
             ],
+            'question_duration' => [
+                'type' => PARAM_INT,
+                'description' => 'the number of seconds a user has for answering a question. this is also the max. points you can get for answering the question correct.',
+            ],
+            'review_duration' => [
+                'type' => PARAM_INT,
+                'description' => 'the number of seconds until after the question is answered the game goes back to the level overview',
+            ],
         ];
     }
 
@@ -106,6 +114,8 @@ class game_dto extends exporter {
             'highscore_teachers' => $this->game->is_highscore_teachers(),
             'mdl_user' => $this->user->id,
             'mdl_user_teacher' => util::user_has_capability('mod/philosophers:manage', $this->ctx, $this->user->id),
+            'question_duration' => $this->game->get_question_duration(),
+            'review_duration' => $this->game->get_review_duration(),
         ];
     }
 }

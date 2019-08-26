@@ -100,6 +100,13 @@ $functions = [
         'type' => 'write',
         'ajax' => true,
     ],
+    'mod_philosophers_cancel_answer' => [
+        'classname' => 'mod_philosophers\external\gamesessions',
+        'methodname' => 'cancel_answer',
+        'description' => 'Submit that time ran out for the current question',
+        'type' => 'write',
+        'ajax' => true,
+    ],
     'mod_philosophers_get_mdl_question' => [
         'classname' => 'mod_philosophers\external\questionbank',
         'methodname' => 'get_mdl_question',

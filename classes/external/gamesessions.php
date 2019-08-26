@@ -303,7 +303,7 @@ class gamesessions extends external_api {
         }
 
         // return
-        $exporter = new question_dto($question, $level, $ctx);
+        $exporter = new question_dto($question, $game, $ctx);
         return $exporter->export($renderer);
     }
 
@@ -361,7 +361,7 @@ class gamesessions extends external_api {
         $ctx = $coursemodule->context;
         $game = util::get_game($coursemodule);
 
-        // try to find existing in-progress gamesession or create a new one
+        // try to find existing in-progress gamesession
         $gamesession = util::get_gamesession($gamesessionid);
         if (!$gamesession->is_in_progress()) {
             throw new moodle_exception('gamesession is not available anymore.');
@@ -379,9 +379,6 @@ class gamesessions extends external_api {
             throw new coding_exception('property »answers« doesn\'t exist on the moodle question with id ' . $question->get_mdl_question() . '.');
         }
 
-        // load the level
-        $level = util::get_level($question->get_level());
-
         // submit the answer
         $correct_mdl_answers = array_filter(
             $mdl_question->answers,
@@ -397,9 +394,13 @@ class gamesessions extends external_api {
         $question->set_mdl_answer_given($mdlanswerid);
         $question->set_finished(true);
         $question->set_correct($correct_mdl_answer->id == $mdlanswerid);
+        $time_taken = (\time() - $question->get_timecreated());
+        $time_available = util::calculate_available_time($game, $question);
+        $time_remaining = \max(0, ($time_available - $time_taken));
+        $question->set_timeremaining($time_remaining);
         if ($question->is_correct()) {
-            // TODO: points are to be calculated from (reading time + game->question_duration) - time taken.
-            $points = $game->get_question_duration();
+            $max_points = $game->get_question_duration();
+            $points = \min($time_remaining, $max_points);
             $question->set_score($points);
         }
         $question->save();
@@ -416,7 +417,95 @@ class gamesessions extends external_api {
         $gamesession->save();
 
         // return result object
-        $exporter = new question_dto($question, $level, $ctx);
+        $exporter = new question_dto($question, $game, $ctx);
+        return $exporter->export($renderer);
+    }
+
+    /**
+     * Definition of parameters for {@see cancel_answer}.
+     *
+     * @return external_function_parameters
+     */
+    public static function cancel_answer_parameters() {
+        return new external_function_parameters([
+            'coursemoduleid' => new external_value(PARAM_INT, 'course module id'),
+            'gamesessionid' => new external_value(PARAM_INT, 'game session id'),
+            'questionid' => new external_value(PARAM_INT, 'question id'),
+        ]);
+    }
+
+    /**
+     * Definition of return type for {@see cancel_answer}.
+     *
+     * @return external_single_structure
+     */
+    public static function cancel_answer_returns() {
+        return question_dto::get_read_structure();
+    }
+
+    /**
+     * Marks the question as cancelled (i.e. time ran out).
+     *
+     * @param int $coursemoduleid
+     * @param int $gamesessionid
+     * @param int $questionid
+     *
+     * @return stdClass
+     * @throws dml_exception
+     * @throws invalid_parameter_exception
+     * @throws moodle_exception
+     * @throws restricted_context_exception
+     */
+    public static function cancel_answer($coursemoduleid, $gamesessionid, $questionid) {
+        $params = [
+            'coursemoduleid' => $coursemoduleid,
+            'gamesessionid' => $gamesessionid,
+            'questionid' => $questionid,
+        ];
+        self::validate_parameters(self::cancel_answer_parameters(), $params);
+
+        list($course, $coursemodule) = get_course_and_cm_from_cmid($coursemoduleid, 'philosophers');
+        self::validate_context($coursemodule->context);
+
+        global $PAGE;
+        $renderer = $PAGE->get_renderer('core');
+        $ctx = $coursemodule->context;
+        $game = util::get_game($coursemodule);
+
+        // try to find existing in-progress gamesession
+        $gamesession = util::get_gamesession($gamesessionid);
+        if (!$gamesession->is_in_progress()) {
+            throw new moodle_exception('gamesession is not available anymore.');
+        }
+        util::validate_gamesession($game, $gamesession);
+
+        // get the question
+        $question = util::get_question($questionid);
+        util::validate_question($gamesession, $question);
+        if ($question->is_finished()) {
+            throw new moodle_exception('question has already been answered.');
+        }
+
+        // set data on question
+        $question->set_mdl_answer_given(0);
+        $question->set_finished(true);
+        $question->set_correct(false);
+        $question->set_score(0);
+        $time_taken = (\time() - $question->get_timecreated());
+        $time_available = util::calculate_available_time($game, $question);
+        $time_remaining = \max(0, ($time_available - $time_taken));
+        $question->set_timeremaining($time_remaining);
+        $question->save();
+
+        // update stats in the gamesession
+        $gamesession->increment_answers_total();
+        if ($gamesession->get_answers_total() === $game->count_active_levels()) {
+            $gamesession->set_state(gamesession::STATE_FINISHED);
+        }
+        $gamesession->save();
+
+        // return result object
+        $exporter = new question_dto($question, $game, $ctx);
         return $exporter->export($renderer);
     }
 }

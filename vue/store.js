@@ -13,6 +13,7 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
     state: {
         initialized: false,
+        now: new Date,
         lang: null,
         courseModuleID: 0,
         contextID: 0,
@@ -30,6 +31,9 @@ export const store = new Vuex.Store({
     },
     //strict: process.env.NODE_ENV !== 'production',
     mutations: {
+        updateTime (state) {
+            state.now = new Date;
+        },
         setInitialized(state, initialized) {
             state.initialized = initialized;
         },
@@ -95,6 +99,7 @@ export const store = new Vuex.Store({
          * @param context
          */
         async init(context) {
+            context.dispatch('startTimeTracking');
             context.dispatch('loadLang').then(() => {
                 Promise.all([
                     context.dispatch('loadComponentStrings'),
@@ -113,6 +118,16 @@ export const store = new Vuex.Store({
                     context.commit('setInitialized', true);
                 });
             });
+        },
+        /**
+         * We need a reactive current time.
+         *
+         * @param context
+         */
+        startTimeTracking (context) {
+            setInterval(() => {
+                context.commit('updateTime')
+            }, 1000)
         },
         /**
          * Determines the current language.
@@ -248,6 +263,18 @@ export const store = new Vuex.Store({
          */
         async submitAnswer(context, payload) {
             const result = await ajax('mod_philosophers_submit_answer', payload);
+            context.commit('setQuestion', result);
+            return context.dispatch('fetchGameSession');
+        },
+        /**
+         * Submit that the time ran out on the currently loaded question.
+         *
+         * @param context
+         *
+         * @returns {Promise<*>}
+         */
+        async cancelAnswer(context, payload) {
+            const result = await ajax('mod_philosophers_cancel_answer', payload);
             context.commit('setQuestion', result);
             return context.dispatch('fetchGameSession');
         },

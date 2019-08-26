@@ -75,6 +75,10 @@ class question extends abstract_model {
      */
     protected $finished;
     /**
+     * @var int The remaining time in seconds for answering this question at the time of answer submission.
+     */
+    protected $timeremaining;
+    /**
      * @var \question_definition
      */
     protected $_mdl_question;
@@ -94,6 +98,7 @@ class question extends abstract_model {
         $this->score = 0;
         $this->correct = 0;
         $this->finished = 0;
+        $this->timeremaining = -1;
     }
 
     /**
@@ -118,6 +123,7 @@ class question extends abstract_model {
         $this->score = isset($data['score']) ? $data['score'] : 0;
         $this->correct = isset($data['correct']) ? ($data['correct'] == 1) : false;
         $this->finished = isset($data['finished']) ? ($data['finished'] == 1) : false;
+        $this->timeremaining = isset($data['timeremaining']) ? $data['timeremaining'] : -1;
     }
 
     /**
@@ -284,5 +290,19 @@ class question extends abstract_model {
      */
     public function set_finished(bool $finished) {
         $this->finished = $finished;
+    }
+
+    /**
+     * @return int
+     */
+    public function get_timeremaining(): int {
+        return $this->timeremaining;
+    }
+
+    /**
+     * @param int $timeremaining
+     */
+    public function set_timeremaining(int $timeremaining) {
+        $this->timeremaining = $timeremaining;
     }
 }

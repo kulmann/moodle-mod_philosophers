@@ -219,6 +219,23 @@ class game extends abstract_model {
     }
 
     /**
+     * Based on the configured reading speed category, this returns the number
+     * of words, a user is expected to be able to read in one minute.
+     *
+     * @return int
+     */
+    public function get_expected_words_per_minute(): int {
+        switch ($this->question_reading_speed) {
+            case -1:
+                return 100;
+            case 1:
+                return 350;
+            default:
+                return 220;
+        }
+    }
+
+    /**
      * @return int
      */
     public function get_timecreated(): int {

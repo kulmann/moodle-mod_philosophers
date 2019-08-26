@@ -238,4 +238,57 @@ class util {
         return $gamesession;
     }
 
+    /**
+     * Calculates the time a user has for answering the given $question.
+     *
+     * @param game $game
+     * @param question $question
+     *
+     * @return int
+     */
+    public static function calculate_available_time($game, $question): int {
+        return $game->get_question_duration() + self::calculate_reading_time($game, $question);
+    }
+
+    /**
+     * Calculates the additional time a user needs to read the question and the answers.
+     *
+     * @param game $game
+     * @param question $question
+     *
+     * @return int Additional read time in seconds. Minimum is 5 seconds. No upper bound.
+     */
+    private static function calculate_reading_time($game, $question) {
+        $word_count = self::count_words_in_question($question);
+        $words_per_minute = $game->get_expected_words_per_minute();
+        return \max(5, (int)\round((60 / $words_per_minute) * $word_count, 0));
+    }
+
+    /**
+     * Counts the total number of words in the question text and answer texts.
+     *
+     * @param question $question
+     *
+     * @return int
+     */
+    private static function count_words_in_question($question) {
+        $mdl_question = $question->get_mdl_question_ref();
+        // count words
+        $word_count = self::count_words_in_string($mdl_question->questiontext);
+        foreach ($mdl_question->answers as $mdl_answer) {
+            $word_count += self::count_words_in_string($mdl_answer->answer);
+        }
+        return $word_count;
+    }
+
+    /**
+     * Counts the total number of words in one string. Allows german umlauts in words as well.
+     *
+     * @param string $str
+     *
+     * @return int
+     */
+    private static function count_words_in_string($str) {
+        return \str_word_count(\strip_tags($str), 0, "ÄÖÜäöüß");
+    }
 }

@@ -125,5 +125,7 @@ $string['game_help_message'] = '<ul><li>You can start a new game at any time by 
 $string['game_stats_empty'] = 'No one is on the leader board, yet.';
 $string['game_stats_rank'] = 'Rank';
 $string['game_stats_user'] = 'User';
+$string['game_stats_point'] = '{$a} Point';
+$string['game_stats_points'] = '{$a} Points';
 $string['game_stats_score'] = 'Score';
 $string['game_stats_sessions'] = 'Attempts';

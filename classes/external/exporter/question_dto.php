@@ -18,8 +18,10 @@ namespace mod_philosophers\external\exporter;
 
 use context;
 use core\external\exporter;
+use mod_philosophers\model\game;
 use mod_philosophers\model\level;
 use mod_philosophers\model\question;
+use mod_philosophers\util;
 use renderer_base;
 
 defined('MOODLE_INTERNAL') || die();
@@ -38,22 +40,22 @@ class question_dto extends exporter {
      */
     protected $question;
     /**
-     * @var level
+     * @var game
      */
-    protected $level;
+    protected $game;
 
     /**
      * question_dto constructor.
      *
      * @param question $question
-     * @param level $level
+     * @param game $game
      * @param context $context
      *
      * @throws \coding_exception
      */
-    public function __construct(question $question, level $level, context $context) {
+    public function __construct(question $question, game $game, context $context) {
         $this->question = $question;
-        $this->level = $level;
+        $this->game = $game;
         parent::__construct([], ['context' => $context]);
     }
 
@@ -99,6 +101,10 @@ class question_dto extends exporter {
                 'type' => PARAM_BOOL,
                 'description' => 'whether or not the question was answered at all',
             ],
+            'timeremaining' => [
+                'type' => PARAM_INT,
+                'description' => 'the time the user had left at the time of answering this question.',
+            ],
             'mdl_question_id' => [
                 'type' => PARAM_INT,
                 'description' => 'id of the associated moodle question',
@@ -106,6 +112,14 @@ class question_dto extends exporter {
             'mdl_question_type' => [
                 'type' => PARAM_TEXT,
                 'description' => 'type of the associated moodle question',
+            ],
+            'score_max' => [
+                'type' => PARAM_INT,
+                'description' => 'the max score you can get for answering this question correct.',
+            ],
+            'time_max' => [
+                'type' => PARAM_INT,
+                'description' => 'the max time you have for answering this question.',
             ],
         ];
     }
@@ -123,6 +137,8 @@ class question_dto extends exporter {
             [
                 'mdl_question_id' => $mdl_question->id,
                 'mdl_question_type' => \get_class($mdl_question),
+                'score_max' => $this->game->get_question_duration(),
+                'time_max' => util::calculate_available_time($this->game, $this->question),
             ]
         );
     }
