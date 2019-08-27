@@ -1,5 +1,5 @@
 <template lang="pug">
-    vk-grid.uk-margin-top(matched)
+    vk-grid(matched)
         div(v-for="level in levels", :key="level.id", class="uk-width-1-1@s uk-width-1-2@m")
             .level-wrapper(:class="getLevelWrapperClass(level)")
                 .uk-text-center.level(@click="selectLevel(level)", :style="getLevelStyles(level)", :class="{'_pointer': !isDone(level)}")
@@ -10,8 +10,8 @@
                             template(v-if="level.seen")
                                 b {{ level.name }}
                                 br
-                                span.done(v-if="level.score === 1") {{ strings.game_stats_point | stringParams(1) }}
-                                span.done(v-else) {{ strings.game_stats_points | stringParams(level.score) }}
+                                span.done(v-if="level.score === 1") {{ strings.game_progress_point | stringParams(1) }}
+                                span.done(v-else) {{ strings.game_progress_points | stringParams(level.score) }}
                             b.open(v-else) {{ level.name }}
 
 </template>

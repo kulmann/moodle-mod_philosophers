@@ -1,6 +1,6 @@
 <template lang="pug">
     .uk-grid.uk-grid-collapse.top-bar(uk-grid).uk-flex-middle
-        .uk-width-auto
+        .uk-width-expand
             button.btn.uk-margin-small-left(@click="restartGame", :class="{'btn-primary': isGameOver, 'btn-default': !isGameOver}")
                 v-icon(name="redo").uk-margin-small-right
                 span {{ strings.game_btn_restart }}
@@ -10,10 +10,6 @@
             button.btn.btn-default.uk-margin-small-left(@click="showGame", v-if="gameButtonVisible")
                 v-icon(name="gamepad").uk-margin-small-right
                 span {{ strings.game_btn_game }}
-        .uk-width-expand
-            .uk-text-center(v-if="gameSession")
-                span(v-if="gameSession.score === 1") {{ strings.game_stats_point | stringParams(1) }}
-                span(v-else) {{ strings.game_stats_points | stringParams(gameSession.score) }}
         .uk-width-auto
             button.btn.btn-default.uk-margin-small-right(@click="showAdmin", v-if="adminButtonVisible")
                 v-icon(name="cogs")

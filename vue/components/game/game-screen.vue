@@ -4,13 +4,13 @@
         loadingAlert(v-if="!initialized", message="Loading Game").uk-text-center
         template(v-else)
             topbar
-            vk-grid.uk-margin-small-top
-                div.uk-width-expand
-                    intro(v-if="introVisible")
-                    levels(v-if="levelsVisible")
-                    question(v-if="questionVisible")
-                    stats(v-if="statsVisible")
-                    help(v-if="helpVisible")
+            .uk-margin-small-top.uk-margin-small-bottom
+                intro(v-if="introVisible")
+                levels(v-if="levelsVisible")
+                question(v-if="questionVisible")
+                stats(v-if="statsVisible")
+                help(v-if="helpVisible")
+            session(v-if="sessionVisible")
 </template>
 
 <script>
@@ -20,6 +20,7 @@
     import intro from './intro';
     import levels from './levels';
     import loadingAlert from '../helper/loading-alert';
+    import session from './session';
     import question from './question/question';
     import stats from './stats';
     import topbar from '../topbar';
@@ -46,6 +47,9 @@
             questionVisible() {
                 return this.gameMode === MODE_QUESTION;
             },
+            sessionVisible() {
+                return this.levelsVisible || this.questionVisible;
+            },
             statsVisible() {
                 return this.gameMode === MODE_STATS;
             },
@@ -59,6 +63,7 @@
             levels,
             loadingAlert,
             question,
+            session,
             stats,
             topbar,
             VkGrid
