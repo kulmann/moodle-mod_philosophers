@@ -118,6 +118,7 @@ $string['game_btn_stats'] = 'Leader Board';
 $string['game_btn_quit'] = 'Quit';
 $string['game_btn_start'] = 'Start Game';
 $string['game_btn_game'] = 'Show Game';
+$string['game_progress_current_score'] = 'Score:';
 $string['game_progress_point'] = '1 Point';
 $string['game_progress_points'] = '{$a} Points';
 $string['game_progress_answered_level'] = '1 out of {$a} questions answered';

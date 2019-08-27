@@ -118,6 +118,7 @@ $string['game_btn_stats'] = 'Bestenliste';
 $string['game_btn_quit'] = 'Beenden';
 $string['game_btn_start'] = 'Spiel Starten';
 $string['game_btn_game'] = 'Zum Spiel';
+$string['game_progress_current_score'] = 'Ergebnis:';
 $string['game_progress_point'] = '1 Punkt';
 $string['game_progress_points'] = '{$a} Punkte';
 $string['game_progress_answered_level'] = '1 von {$a} Fragen beantwortet';
