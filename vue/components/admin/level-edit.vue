@@ -21,6 +21,10 @@
                         .uk-form-controls
                             input.uk-input(v-model="data.fgcolor", :placeholder="strings.admin_level_lbl_fgcolor")
                             i(v-html="strings.admin_level_lbl_fgcolor_help")
+                    .uk-margin-small
+                        label.uk-form-label {{ strings.admin_level_lbl_image }}
+                        .uk-form-controls
+                            input.uk-input(type="file", @change="onImageSelected")
                     h3.uk-margin-large-top {{ strings.admin_level_lbl_categories }}
                     .uk-margin-small(v-for="(category, index) in categories", :key="index")
                         label.uk-form-label {{ strings.admin_level_lbl_category | stringParams(index + 1) }}
@@ -69,6 +73,8 @@
                 data: null,
                 categories: null,
                 saving: false,
+                imageMimetype: null,
+                imageContent: null,
             }
         },
         computed: {
@@ -103,7 +109,8 @@
                         name: '',
                         bgcolor: '',
                         fgcolor: '',
-                        image: '',
+                        imgmimetype: '',
+                        imgcontent: null,
                     };
                     this.categories = [];
                 } else {
@@ -140,8 +147,9 @@
                     name: this.data.name,
                     bgcolor: this.data.bgcolor,
                     fgcolor: this.data.fgcolor,
-                    image: this.data.image,
                     categories: categories,
+                    imgmimetype: (this.imageMimetype ? this.imageMimetype : ''),
+                    imgcontent: (this.imageContent ? this.imageContent : ''),
                 };
                 this.saving = true;
                 this.saveLevel(result)
@@ -151,6 +159,19 @@
                             this.goToLevelList();
                         }
                     });
+            },
+            onImageSelected(event) {
+                let file = event.target.files[0];
+                if (file.type.startsWith('image/')) {
+                    let reader = new FileReader();
+                    reader.onloadend = function () {
+                        let result = reader.result.split(';');
+                        // this.imageMimetype = result[0].replace('data:', '');
+                        // this.imageContent = result[1];
+                        console.log(this.imageMimetype);
+                    }.bind(this);
+                    reader.readAsDataURL(file);
+                }
             },
         },
         mounted() {

@@ -4,9 +4,9 @@
             .level-wrapper(:class="getLevelWrapperClass(level)")
                 .uk-text-center.level(@click="selectLevel(level)", :style="getLevelStyles(level)", :class="{'_pointer': !isDone(level)}")
                     vk-grid.uk-grid-small.uk-flex-middle
-                        .uk-width-auto
-                            v-icon(v-if="getLevelIcon(level)", :name="getLevelIcon(level)", scale="1.5")
-                        .uk-width-expand.uk-text-center
+                        .uk-width-auto.level-content
+                            v-icon.uk-margin-small-left(v-if="getLevelIcon(level)", :name="getLevelIcon(level)", scale="1.5")
+                        .uk-width-expand.level-content
                             template(v-if="level.seen")
                                 b {{ level.name }}
                                 br
@@ -58,7 +58,6 @@
             },
             getLevelStyles(level) {
                 let styles = [];
-                styles.push('height: 100%;');
                 // fg color
                 if (level.fgcolor) {
                     styles.push('color: ' + level.fgcolor + ';');
@@ -93,6 +92,7 @@
 
 <style lang="scss" scoped>
     .level-wrapper {
+        height: 100%;
         padding: 2px;
         border-radius: 10px;
     }
@@ -113,8 +113,14 @@
     }
 
     .level {
+        height: 100%;
         border-radius: 10px;
-        padding: 10px;
+    }
+
+    .level-content {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        text-align: center;
     }
 
     .open {

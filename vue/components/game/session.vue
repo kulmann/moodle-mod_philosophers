@@ -1,10 +1,10 @@
 <template lang="pug">
     .uk-grid.uk-grid-collapse.footer-bar(uk-grid).uk-flex-middle
-        .uk-width-expand
+        .uk-width-expand.uk-margin-small-left
             span(v-if="completedLevels === totalLevels") {{ strings.game_progress_answered_levels_all | stringParams(totalLevels) }}
             span(v-else-if="completedLevels === 1") {{ strings.game_progress_answered_level | stringParams(totalLevels) }}
             span(v-else) {{ strings.game_progress_answered_levels | stringParams({completed: completedLevels, total: totalLevels}) }}
-        .uk-width-auto(:class="{'score-update': activeAnimation}")
+        .uk-width-auto.uk-margin-small-right(:class="{'score-update': activeAnimation}")
             span {{ strings.game_progress_current_score }}&nbsp;
             span(v-if="visibleScore === 1") {{ strings.game_progress_point }}
             span(v-else) {{ strings.game_progress_points | stringParams(visibleScore) }}
@@ -81,8 +81,6 @@
 
 <style scoped>
     .footer-bar {
-        padding-left: 10px;
-        padding-right: 10px;
         width: 100%;
         background-color: #f8f8f8;
         border-bottom-left-radius: 5px;

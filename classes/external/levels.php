@@ -362,12 +362,13 @@ class levels extends external_api {
             'name' => new external_value(PARAM_TEXT, 'name of the level'),
             'bgcolor' => new external_value(PARAM_TEXT, 'the background color for level representation'),
             'fgcolor' => new external_value(PARAM_TEXT, 'the foreground color for level representation'),
-            'image' => new external_value(PARAM_TEXT, 'an image url for level representation'),
             'categories' => new external_multiple_structure(new external_single_structure([
                 'categoryid' => new external_value(PARAM_INT, 'the id in our category db table'),
                 'mdlcategory' => new external_value(PARAM_INT, 'the moodle category id'),
                 'subcategories' => new external_value(PARAM_BOOL, 'whether or not subcategories should be included'),
             ])),
+            'imgmimetype' => new external_value(PARAM_TEXT, 'image mimetype', false),
+            'imgcontent' => new external_value(PARAM_BASE64, 'image content', false),
         ]);
     }
 
@@ -388,8 +389,9 @@ class levels extends external_api {
      * @param string $name
      * @param string $bgcolor
      * @param string $fgcolor
-     * @param string $image
      * @param array $categories
+     * @param string $imgmimetype
+     * @param mixed $imgcontent
      *
      * @return stdClass
      * @throws \required_capability_exception
@@ -399,15 +401,16 @@ class levels extends external_api {
      * @throws moodle_exception
      * @throws restricted_context_exception
      */
-    public static function save_level($coursemoduleid, $levelid, $name, $bgcolor, $fgcolor, $image, $categories) {
+    public static function save_level($coursemoduleid, $levelid, $name, $bgcolor, $fgcolor, $categories, $imgmimetype, $imgcontent) {
         $params = [
             'coursemoduleid' => $coursemoduleid,
             'levelid' => $levelid,
             'name' => $name,
             'bgcolor' => $bgcolor,
             'fgcolor' => $fgcolor,
-            'image' => $image,
             'categories' => $categories,
+            'imgmimetype' => $imgmimetype,
+            'imgcontent' => $imgcontent,
         ];
         self::validate_parameters(self::save_level_parameters(), $params);
 
@@ -436,7 +439,9 @@ class levels extends external_api {
         $level->set_name($name);
         $level->set_bgcolor($bgcolor);
         $level->set_fgcolor($fgcolor);
-        $level->set_image($image);
+        if ($imgmimetype && $imgcontent) {
+            // TODO: store the base64 encoded image data into a file, store it and save the url in the level
+        }
         $level->save();
 
         // transform provided $categories into category model instances.
