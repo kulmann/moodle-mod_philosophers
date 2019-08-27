@@ -3,7 +3,7 @@
         template(v-if="question")
             loadingAlert(v-if="mdl_question === null", :message="strings.game_loading_question")
             template(v-else)
-                div(:is="componentByType", :levels="levels", :gameSession="gameSession", :question="question", :mdl_question="mdl_question", :mdl_answers="mdl_answers")
+                div(:is="componentByType", :levels="levels", :game="game", :gameSession="gameSession", :question="question", :mdl_question="mdl_question", :mdl_answers="mdl_answers")
                 actions(v-if="areActionsAllowed").uk-margin-small-top
 </template>
 
@@ -21,6 +21,7 @@
         computed: {
             ...mapState([
                 'strings',
+                'game',
                 'gameSession',
                 'gameMode',
                 'levels',

@@ -1,5 +1,5 @@
 <template lang="pug">
-    b {{ remainingSeconds }}
+    b.time(:class="timeLabelClass") {{ remainingSeconds }}
 </template>
 
 <script>
@@ -8,6 +8,7 @@
     export default {
         props: {
             question: Object,
+            game: Object,
         },
         data() {
             return {
@@ -19,6 +20,18 @@
                 'strings',
                 'now',
             ]),
+            timeLabelClass() {
+                if (this.remainingSeconds > this.question.score_max) {
+                    return 'time-reading';
+                }
+                if (this.remainingSeconds > (this.question.score_max / 3 * 2)) {
+                    return 'time-plenty';
+                }
+                if (this.remainingSeconds > (this.question.score_max / 3)) {
+                    return 'time-okish';
+                }
+                return 'time-tight';
+            },
             remainingSeconds() {
                 if (this.question.timeremaining >= 0) {
                     return this.question.timeremaining;
@@ -32,19 +45,40 @@
         methods: {
             ...mapActions([
                 'cancelAnswer',
-            ])
+            ]),
         },
         watch: {
-            remainingSeconds (seconds) {
+            remainingSeconds(seconds) {
                 if (this.question && this.cancelledQuestionId !== this.question.id && seconds <= 0) {
                     this.cancelledQuestionId = this.question.id;
                     this.cancelAnswer({
                         'gamesessionid': this.question.gamesession,
                         'questionid': this.question.id,
                     });
-                    console.log("cancelled question " + this.question.id);
                 }
             }
         }
     }
 </script>
+
+<style scoped>
+    .time {
+        font-weight: bold;
+    }
+
+    .time-reading {
+        color: black;
+    }
+
+    .time-plenty {
+        color: green;
+    }
+
+    .time-okish {
+        color: orange;
+    }
+
+    .time-tight {
+        color: red;
+    }
+</style>

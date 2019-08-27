@@ -6,7 +6,7 @@
                     .uk-width-expand
                         i.uk-h5 {{ levelName }}
                     .uk-width-auto
-                        questionTimer(:question="question")
+                        questionTimer(:question="question", :game="game")
             .uk-card-body
                 p._question(v-html="mdl_question.questiontext")
         vk-grid.uk-margin-top(matched)
@@ -29,6 +29,7 @@
         mixins: [mixins],
         props: {
             levels: Array,
+            game: Object,
             gameSession: Object,
             question: Object,
             mdl_question: Object,
