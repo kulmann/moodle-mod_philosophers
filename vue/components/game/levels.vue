@@ -108,13 +108,14 @@
     }
 
     .level-pending {
-        background-color: #f4dc7f;
-        border: 1px solid #f2d668;
+        background-color: #f8f8f8;
+        border: 1px solid #ccc;
     }
 
     .level {
         height: 100%;
         border-radius: 10px;
+        border: 1px solid #ccc;
     }
 
     .level-content {
