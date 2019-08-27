@@ -5,8 +5,6 @@
             template(v-else)
                 div(:is="componentByType", :levels="levels", :gameSession="gameSession", :question="question", :mdl_question="mdl_question", :mdl_answers="mdl_answers")
                 actions(v-if="areActionsAllowed").uk-margin-small-top
-        .uk-alert.uk-alert-primary(uk-alert, v-else)
-            p Show info about level selection if not dead. If dead, show stats?!
 </template>
 
 <script>
