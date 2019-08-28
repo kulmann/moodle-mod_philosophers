@@ -17,6 +17,8 @@ function init(coursemoduleid, contextid) {
     Vue.use(VueRouter);
     Vue.component('v-icon', Icon);
 
+    console.log(M);
+
     require('./styles/theme.scss');
 
     store.commit('setCourseModuleID', coursemoduleid);
@@ -71,6 +73,10 @@ function init(coursemoduleid, contextid) {
             if (store.state.strings.hasOwnProperty(to.meta.title)) {
                 document.title = store.state.strings[to.meta.title];
             }
+        }
+        // If this goes to an admin page, we need to cancel the current gamesession
+        if (to.path.startsWith('/admin')) {
+            store.dispatch('cancelGameSession');
         }
         next()
     });

@@ -16,7 +16,7 @@
 
 namespace mod_philosophers\model;
 
-use mod_philosophers\external\util;
+use mod_philosophers\util;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -108,31 +108,6 @@ class gamesession extends abstract_model {
         $this->answers_correct = isset($data['answers_correct']) ? $data['answers_correct'] : 0;
         $this->state = isset($data['state']) ? $data['state'] : self::STATE_PROGRESS;
         $this->levels_order = isset($data['levels_order']) ? $data['levels_order'] : '';
-    }
-
-    /**
-     * Returns the most recent question for this gamesession. If there are no questions yet, null will be returned.
-     *
-     * @return question|null
-     * @throws \dml_exception
-     */
-    public function get_most_recent_question() {
-        global $DB;
-        $sql_questions = "
-            SELECT q.id
-              FROM {philosophers_questions} AS q
-        INNER JOIN {philosophers_levels} AS l on q.level = l.id 
-             WHERE q.gamesession = :gamesession
-          ORDER BY l.position DESC
-        ";
-        $questions = $DB->get_records_sql($sql_questions, ['gamesession' => $this->get_id()]);
-        if ($questions === false || empty($questions)) {
-            return null;
-        }
-        $most_recent_question = \array_shift($questions);
-        $question = new question();
-        $question->load_data_by_id($most_recent_question->id);
-        return $question;
     }
 
     /**

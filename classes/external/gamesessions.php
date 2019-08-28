@@ -109,11 +109,11 @@ class gamesessions extends external_api {
     }
 
     /**
-     * Definition of parameters for {@see close_gamesession}.
+     * Definition of parameters for {@see cancel_gamesession}.
      *
      * @return external_function_parameters
      */
-    public static function close_gamesession_parameters() {
+    public static function cancel_gamesession_parameters() {
         return new external_function_parameters([
             'coursemoduleid' => new external_value(PARAM_INT, 'course module id'),
             'gamesessionid' => new external_value(PARAM_INT, 'game session id'),
@@ -121,16 +121,16 @@ class gamesessions extends external_api {
     }
 
     /**
-     * Definition of return type for {@see close_gamesession}.
+     * Definition of return type for {@see cancel_gamesession}.
      *
      * @return external_single_structure
      */
-    public static function close_gamesession_returns() {
+    public static function cancel_gamesession_returns() {
         return gamesession_dto::get_read_structure();
     }
 
     /**
-     * Sets the state of the given game session to FINISHED.
+     * Sets the state of the given game session to DUMPED.
      *
      * @param int $coursemoduleid
      * @param int $gamesessionid
@@ -142,9 +142,9 @@ class gamesessions extends external_api {
      * @throws moodle_exception
      * @throws restricted_context_exception
      */
-    public static function close_gamesession($coursemoduleid, $gamesessionid) {
+    public static function cancel_gamesession($coursemoduleid, $gamesessionid) {
         $params = ['coursemoduleid' => $coursemoduleid, 'gamesessionid' => $gamesessionid];
-        self::validate_parameters(self::close_gamesession_parameters(), $params);
+        self::validate_parameters(self::cancel_gamesession_parameters(), $params);
 
         list($course, $coursemodule) = get_course_and_cm_from_cmid($coursemoduleid, 'philosophers');
         self::validate_context($coursemodule->context);
@@ -158,14 +158,10 @@ class gamesessions extends external_api {
         $gamesession = util::get_gamesession($gamesessionid);
         util::validate_gamesession($game, $gamesession);
 
-        // close the gamesession
+        // cancel the gamesession
         if ($gamesession->is_in_progress()) {
-            $question = $gamesession->get_most_recent_question();
-            if (!$question->is_finished() || $question->is_correct() || $game->is_continue_on_failure()) {
-                $gamesession->set_state(gamesession::STATE_FINISHED);
-                $gamesession->set_won(true);
-                $gamesession->save();
-            }
+            $gamesession->set_state(gamesession::STATE_DUMPED);
+            $gamesession->save();
         }
 
         // return the changed game session

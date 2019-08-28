@@ -31,7 +31,7 @@ export const store = new Vuex.Store({
     },
     //strict: process.env.NODE_ENV !== 'production',
     mutations: {
-        updateTime (state) {
+        updateTime(state) {
             state.now = new Date;
         },
         setInitialized(state, initialized) {
@@ -84,7 +84,7 @@ export const store = new Vuex.Store({
             let level = _.find(state.levels, function (level) {
                 return level.id === levelId;
             });
-            if(level) {
+            if (level) {
                 level.seen = true;
             }
         },
@@ -124,7 +124,7 @@ export const store = new Vuex.Store({
          *
          * @param context
          */
-        startTimeTracking (context) {
+        async startTimeTracking(context) {
             setInterval(() => {
                 context.commit('updateTime')
             }, 1000)
@@ -223,21 +223,22 @@ export const store = new Vuex.Store({
             });
         },
         /**
-         * Closes the current game session (i.e. sets state to FINISHED). Should only be called when the current state
-         * of the game session allows it, i.e. current question is already answered / no question is currently shown
-         * to be answered.
+         * Closes the current game session (i.e. sets state to DUMPED). This is needed when the user goes to the admin
+         * page, to reload the levels without gamesession association.
          *
          * @param context
          *
          * @returns {Promise<void>}
          */
-        async closeGameSession(context) {
-            let args = {
-                'gamesessionid': this.state.gameSession.id
-            };
-            const gameSession = await ajax('mod_philosophers_close_gamesession', args);
-            context.commit('setGameSession', gameSession);
-            return context.dispatch('fetchLevels');
+        async cancelGameSession(context) {
+            if (this.state.gameSession) {
+                let args = {
+                    'gamesessionid': this.state.gameSession.id
+                };
+                const gameSession = await ajax('mod_philosophers_cancel_gamesession', args);
+                context.commit('setGameSession', null);
+                return context.dispatch('fetchLevels');
+            }
         },
         /**
          * Loads the question for the given level index. Doesn't matter if it's already answered.

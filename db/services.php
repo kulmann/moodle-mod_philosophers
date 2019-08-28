@@ -72,10 +72,10 @@ $functions = [
         'type' => 'write',
         'ajax' => true,
     ],
-    'mod_philosophers_close_gamesession' => [
+    'mod_philosophers_cancel_gamesession' => [
         'classname' => 'mod_philosophers\external\gamesessions',
-        'methodname' => 'close_gamesession',
-        'description' => 'Sets the state of the given game session to FINISHED.',
+        'methodname' => 'cancel_gamesession',
+        'description' => 'Sets the state of the given game session to DUMPED.',
         'type' => 'write',
         'ajax' => true,
     ],
