@@ -1,9 +1,10 @@
-# »philosophers Quiz« game made with vue.js for moodle
-This is a quiz game plugin for Moodle. It can be added to any Moodle course as an activity. You will 
-have to define levels and assign categories of your moodle question bank to each level. The game frontend 
-is written with [Vue.js](https://vuejs.org/) so that playing the game doesn't require any page reloads.
+# »Philosophers Quiz« game made with vue.js for moodle
+This is a quiz game plugin for Moodle with a strong focus on speed for answering the questions. It can be added to 
+any Moodle course as an activity. You will have to define levels and assign categories of your moodle question bank 
+to each level. The game frontend is written with [Vue.js](https://vuejs.org/) so that playing the game doesn't 
+require any page reloads.
 
-![game view](images/README-Screenshot-GameView.png)
+![game levels](images/README-Screenshot-GameLevels.png)
 
 # Setup
 1. Install Plugin: Just download the repository as zip file and install it. You can remove the vue folder to reduce the size.
@@ -13,18 +14,19 @@ is written with [Vue.js](https://vuejs.org/) so that playing the game doesn't re
 
 # Game Settings and Level configuration
 A new instance of this game can be added to any Moodle course through the "add activity" link in your course. You 
-will be  able to set some game options (like the currency for the scores, whether or not teachers should be included
-in the leader board, etc). Configuring the different levels is a screen within the app, i.e. you  will have to go 
-to the activity and will see a settings icon in the top right corner of the game screen. You can add as many levels 
-as you want. You need to assign at least one moodle question category to every game level. The game will 
-then pick a random **single choice question** from those categories. You can decide to configure a level as "safe 
-spot". A player giving a wrong answer will fall back to the nearest safe spot level and receive that score for his 
-leader board rank. If you don't set a name for a level, the score of the level and the currency symbol from the game 
-options will be shown instead.
+will be  able to set some game options (like the available seconds to answer a question, whether or not teachers 
+should be included in the leader board, etc). Configuring the different levels is a screen within the app, i.e. you 
+will have to go to the activity and will see a settings icon in the top right corner of the game screen. You can add 
+as many levels as you want. You need to assign at least one moodle question category to every game level. The game will 
+then pick a random **single choice question** from those categories. There will be an individually calculated amount of
+time to answer the question. It is calculated from a) the constant amount of time (in seconds) you configured in the
+game settings and b) a reading time, calculated from the configured reading speed level and the number of words in
+the question + answers. When the time reaches 0 the question will be cancelled (0 points). If the correct answer was
+picked, the participant will receive the number of remaining seconds as points (max. the static part, reading time
+is never counted in the score). You can set a review time per question. After the question is answered, the game 
+will go back to the level overview automatically after the review time has passed.
 
-# Special thanks
-The initial effort of integrating Vue.js into a moodle plugin was done by Martin Gauk from TU Berlin. Cudos for your 
-awesome work, Martin!
+![game question](images/README-Screenshot-GameQuestion.png)
 
 # Contribute
 The javascript files and Vue components will be bundled into a single file as AMD module
