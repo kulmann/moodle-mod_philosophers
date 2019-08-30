@@ -25,6 +25,10 @@
                         label.uk-form-label {{ strings.admin_level_lbl_image }}
                         .uk-form-controls
                             input.uk-input(type="file", @change="onImageSelected")
+                            span(v-if="imageFilename", v-html="stringParams(strings.admin_level_lbl_image_provided, imageFilename)")
+                            template(v-if="data.imageurl")
+                                br
+                                img(:src="data.imageurl", :width="200")
                     h3.uk-margin-large-top {{ strings.admin_level_lbl_categories }}
                     .uk-margin-small(v-for="(category, index) in categories", :key="index")
                         label.uk-form-label {{ strings.admin_level_lbl_category | stringParams(index + 1) }}
@@ -75,6 +79,7 @@
                 saving: false,
                 imageMimetype: null,
                 imageContent: null,
+                imageFilename: null,
             }
         },
         computed: {
@@ -109,7 +114,9 @@
                         name: '',
                         bgcolor: '',
                         fgcolor: '',
-                        imgmimetype: '',
+                        image: '',
+                        imageurl: '',
+                        imgmimetype: null,
                         imgcontent: null,
                     };
                     this.categories = [];
@@ -148,6 +155,7 @@
                     bgcolor: this.data.bgcolor,
                     fgcolor: this.data.fgcolor,
                     categories: categories,
+                    image: this.data.image,
                     imgmimetype: (this.imageMimetype ? this.imageMimetype : ''),
                     imgcontent: (this.imageContent ? this.imageContent : ''),
                 };
@@ -163,12 +171,12 @@
             onImageSelected(event) {
                 let file = event.target.files[0];
                 if (file.type.startsWith('image/')) {
+                    this.imageFilename = file.name;
                     let reader = new FileReader();
                     reader.onloadend = function () {
-                        let result = reader.result.split(';');
-                        // this.imageMimetype = result[0].replace('data:', '');
-                        // this.imageContent = result[1];
-                        console.log(this.imageMimetype);
+                        let result = reader.result.split(',');
+                        this.imageMimetype = result[0].replace('data:', '').replace(';base64', '');
+                        this.imageContent = result[1];
                     }.bind(this);
                     reader.readAsDataURL(file);
                 }

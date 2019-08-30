@@ -96,7 +96,11 @@ class level_dto extends exporter {
             ],
             'image' => [
                 'type' => PARAM_TEXT,
-                'description' => 'background image for level representation',
+                'description' => 'filename of background image for level representation',
+            ],
+            'imageurl' => [
+                'type' => PARAM_TEXT,
+                'description' => 'url of background image for level representation',
             ],
             'finished' => [
                 'type' => PARAM_BOOL,
@@ -127,6 +131,7 @@ class level_dto extends exporter {
         $result = \array_merge(
             $this->level->to_array(),
             [
+                'imageurl' => $this->level->get_image_url($this->related['context']),
                 'finished' => $this->question ? $this->question->is_finished() : false,
                 'correct' => $this->question ? $this->question->is_correct() : false,
                 'score' => $this->question ? $this->question->get_score() : 0,

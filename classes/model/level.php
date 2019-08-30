@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die();
  */
 class level extends abstract_model {
 
-    const STATE_PRIVATE = 'private';
+    const FILE_AREA = 'levels';
     const STATE_ACTIVE = 'active';
     const STATE_DELETED = 'deleted';
 
@@ -48,7 +48,7 @@ class level extends abstract_model {
      */
     protected $position;
     /**
-     * @var string The url of the image of the level.
+     * @var string The filename of the image of the level.
      */
     protected $image;
     /**
@@ -88,7 +88,7 @@ class level extends abstract_model {
         $this->id = isset($data['id']) ? $data['id'] : 0;
         $this->game = $data['game'];
         $this->state = isset($data['state']) ? $data['state'] : self::STATE_ACTIVE;
-        $this->name =  isset($data['name']) ? $data['name'] : '';
+        $this->name = isset($data['name']) ? $data['name'] : '';
         $this->position = isset($data['position']) ? $data['position'] : 0;
         $this->image = isset($data['image']) ? $data['image'] : '';
         $this->bgcolor = isset($data['bgcolor']) ? $data['bgcolor'] : '#ccc';
@@ -105,7 +105,7 @@ class level extends abstract_model {
         global $DB;
         $sql_params = ['level' => $this->get_id()];
         $records = $DB->get_records('philosophers_categories', $sql_params);
-        return \array_map(function($record) {
+        return \array_map(function ($record) {
             $category = new category();
             $category->apply($record);
             return $category;
@@ -149,6 +149,69 @@ class level extends abstract_model {
         } else {
             throw new \dml_exception('not found');
         }
+    }
+
+    /**
+     * Takes an image, provided as a base64 encoded string, and stores it as a file. The filename will be set
+     * in this level entity, so that it can be referenced later.
+     *
+     * @param \context $context
+     * @param string $mimetype
+     * @param string $base64content
+     *
+     * @throws \file_exception
+     * @throws \stored_file_creation_exception
+     */
+    public function store_image($context, $mimetype, $base64content) {
+        // delete possibly already existing image
+        $this->delete_image($context);
+        // save as file
+        $fileinfo = [
+            'contextid' => $context->id,
+            'component' => 'mod_philosophers',
+            'filearea' => self::FILE_AREA,
+            'itemid' => $this->get_id(),
+            'filepath' => '/',
+            'filename' => \uniqid(),
+            'mimetype' => $mimetype,
+            'timecreated' => \time(),
+            'timemodified' => \time(),
+        ];
+        $fs = get_file_storage();
+        $file = $fs->create_file_from_string($fileinfo, \base64_decode($base64content));
+        $this->set_image($file->get_filename());
+    }
+
+    /**
+     * Deletes the image of this level entity, if one is set at all.
+     *
+     * @param \context $context
+     */
+    public function delete_image($context) {
+        if ($this->get_image()) {
+            $fs = get_file_storage();
+            if ($file = $fs->get_file($context->id, 'mod_philosophers', self::FILE_AREA, $this->get_id(), '/', $this->get_image())) {
+                $file->delete();
+            }
+            $this->set_image('');
+        }
+    }
+
+    /**
+     * If an image is set, constructs and returns an absolute url to the file.
+     *
+     * @param $context
+     * @return \moodle_url|string
+     */
+    public function get_image_url($context) {
+        if ($this->get_image()) {
+            $fs = get_file_storage();
+            if ($file = $fs->get_file($context->id, 'mod_philosophers', self::FILE_AREA, $this->get_id(), '/', $this->get_image())) {
+                $url = \moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename(), false);
+                return $url->out();
+            }
+        }
+        return '';
     }
 
     /**
@@ -249,6 +312,11 @@ class level extends abstract_model {
         $this->fgcolor = $this->to_valid_hex_string($fgcolor);
     }
 
+    /**
+     * @param string $color
+     *
+     * @return string
+     */
     private function to_valid_hex_string(string $color) {
         $color = \str_replace('#', '', $color);
         return '#' . $color;

@@ -101,6 +101,7 @@ $string['admin_level_lbl_bgcolor_help'] = 'HEX format, with or without #, as 3 o
 $string['admin_level_lbl_fgcolor'] = 'Text Color';
 $string['admin_level_lbl_fgcolor_help'] = 'HEX format, with or without #, as 3 or 6 chars. Example: #ffffff or #fff';
 $string['admin_level_lbl_image'] = 'Background Image';
+$string['admin_level_lbl_image_provided'] = 'New image file: <i>{$a}</i>';
 $string['admin_level_lbl_categories'] = 'Question assignments';
 $string['admin_level_lbl_category'] = 'Category {$a}';
 $string['admin_level_lbl_category_please_select'] = 'Select category';

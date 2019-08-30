@@ -50,7 +50,7 @@
                 <FIELD NAME="position" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false"
                        DEFAULT="0"/>
                 <FIELD NAME="image" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"
-                       COMMENT="The url of the image of the topic."/>
+                       COMMENT="The filename of the image of the level."/>
                 <FIELD NAME="bgcolor" TYPE="char" LENGTH="7" NOTNULL="false" SEQUENCE="false"
                        COMMENT="The background color code for the level."/>
                 <FIELD NAME="fgcolor" TYPE="char" LENGTH="7" NOTNULL="false" SEQUENCE="false"

@@ -367,8 +367,9 @@ class levels extends external_api {
                 'mdlcategory' => new external_value(PARAM_INT, 'the moodle category id'),
                 'subcategories' => new external_value(PARAM_BOOL, 'whether or not subcategories should be included'),
             ])),
+            'image' => new external_value(PARAM_TEXT, 'image filename'),
             'imgmimetype' => new external_value(PARAM_TEXT, 'image mimetype', false),
-            'imgcontent' => new external_value(PARAM_BASE64, 'image content', false),
+            'imgcontent' => new external_value(PARAM_TEXT, 'image content as base64 string', false),
         ]);
     }
 
@@ -390,8 +391,9 @@ class levels extends external_api {
      * @param string $bgcolor
      * @param string $fgcolor
      * @param array $categories
+     * @param string $image
      * @param string $imgmimetype
-     * @param mixed $imgcontent
+     * @param string $imgcontent
      *
      * @return stdClass
      * @throws \required_capability_exception
@@ -401,7 +403,7 @@ class levels extends external_api {
      * @throws moodle_exception
      * @throws restricted_context_exception
      */
-    public static function save_level($coursemoduleid, $levelid, $name, $bgcolor, $fgcolor, $categories, $imgmimetype, $imgcontent) {
+    public static function save_level($coursemoduleid, $levelid, $name, $bgcolor, $fgcolor, $categories, $image, $imgmimetype, $imgcontent) {
         $params = [
             'coursemoduleid' => $coursemoduleid,
             'levelid' => $levelid,
@@ -409,6 +411,7 @@ class levels extends external_api {
             'bgcolor' => $bgcolor,
             'fgcolor' => $fgcolor,
             'categories' => $categories,
+            'image' => $image,
             'imgmimetype' => $imgmimetype,
             'imgcontent' => $imgcontent,
         ];
@@ -439,10 +442,18 @@ class levels extends external_api {
         $level->set_name($name);
         $level->set_bgcolor($bgcolor);
         $level->set_fgcolor($fgcolor);
-        if ($imgmimetype && $imgcontent) {
-            // TODO: store the base64 encoded image data into a file, store it and save the url in the level
-        }
         $level->save();
+
+        // save / delete image
+        if ($imgcontent) {
+            // save image if provided in UI (we need an entry id for that, so do that after initial save)
+            $level->store_image($coursemodule->context, $imgmimetype, $imgcontent);
+            $level->save();
+        } else if (!empty($level->get_image()) && empty($image)) {
+            // image was cleared in UI. delete it
+            $level->delete_image($coursemodule->context);
+            $level->save();
+        }
 
         // transform provided $categories into category model instances.
         $categories = \array_map(function ($category) use ($level) {
