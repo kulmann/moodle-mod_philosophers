@@ -30,5 +30,5 @@ defined('MOODLE_INTERNAL') || die();
 $plugin->component = 'mod_philosophers';
 $plugin->requires = 2017111302;
 $plugin->maturity = MATURITY_BETA;
-$plugin->version = 2019082801;
-$plugin->release = '0.3.5';
+$plugin->version = 2019083001;
+$plugin->release = '0.3.6';

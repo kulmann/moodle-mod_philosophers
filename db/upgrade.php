@@ -34,7 +34,15 @@ function xmldb_philosophers_upgrade($oldversion = 0) {
     global $CFG, $DB;
 
     $dbman = $DB->get_manager();
-
+    if ($oldversion < 2019083001) {
+        // we added a service. need to add it to the db as well.
+        $servicerecord = new \stdClass();
+        $servicerecord->name = 'mod_philosophers_cancel_gamesession';
+        $servicerecord->classname = 'mod_philosophers\\external\\gamesessions';
+        $servicerecord->methodname = 'cancel_gamesession';
+        $servicerecord->component = 'mod_philosophers';
+        $DB->insert_record('external_functions', $servicerecord);
+    }
 
 
     return true;
