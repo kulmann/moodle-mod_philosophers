@@ -19,9 +19,9 @@
                                 td.actions.uk-table-shrink.uk-preserve-width
                                     button.btn.btn-default(@click="editLevel(level)")
                                         v-icon(name="regular/edit")
-                                    button.btn.btn-default(@click="moveLevel(level, -1)", :disabled="level.position === 0")
-                                        v-icon(name="arrow-down")
                                     button.btn.btn-default(@click="moveLevel(level, 1)", :disabled="level.position === (levels.length - 1)")
+                                        v-icon(name="arrow-down")
+                                    button.btn.btn-default(@click="moveLevel(level, -1)", :disabled="level.position === 0")
                                         v-icon(name="arrow-up")
                                     button.btn.btn-default(@click="deleteLevelAsk(level)")
                                         v-icon(name="trash")
