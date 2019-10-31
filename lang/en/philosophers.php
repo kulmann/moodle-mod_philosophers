@@ -68,6 +68,11 @@ $string['highscore_mode_average'] = 'Average score';
 $string['highscore_mode_help'] = 'Please select which scoring mode you want to use for the highscore calculation of a user.';
 $string['highscore_teachers'] = 'Teachers in leader board';
 $string['highscore_teachers_help'] = 'If enabled teachers\' scores will appear in the leader board.';
+$string['level_tile_height'] = 'Level tile height';
+$string['level_tile_height_help'] = 'Please select the height for level tile representation.';
+$string['level_tile_height_0'] = 'Flat';
+$string['level_tile_height_1'] = 'Regular';
+$string['level_tile_height_2'] = 'Tall';
 
 /* activity edit page: control */
 $string['control_edit'] = 'Control';

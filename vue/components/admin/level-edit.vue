@@ -7,28 +7,31 @@
                 form.uk-form-stacked
                     h3(v-if="editing") {{ strings.admin_level_title_edit | stringParams(data.position + 1) }}
                     h3(v-else) {{ strings.admin_level_title_add | stringParams(data.position + 1) }}
-                    .uk-margin-small
-                        label.uk-form-label {{ strings.admin_level_lbl_name }}
-                        .uk-form-controls
-                            input.uk-input(v-model="data.name", :placeholder="strings.admin_level_lbl_name")
-                    .uk-margin-small
-                        label.uk-form-label {{ strings.admin_level_lbl_bgcolor }}
-                        .uk-form-controls
-                            input.uk-input(v-model="data.bgcolor", :placeholder="strings.admin_level_lbl_bgcolor")
-                            i(v-html="strings.admin_level_lbl_bgcolor_help")
-                    .uk-margin-small
-                        label.uk-form-label {{ strings.admin_level_lbl_fgcolor }}
-                        .uk-form-controls
-                            input.uk-input(v-model="data.fgcolor", :placeholder="strings.admin_level_lbl_fgcolor")
-                            i(v-html="strings.admin_level_lbl_fgcolor_help")
-                    .uk-margin-small
-                        label.uk-form-label {{ strings.admin_level_lbl_image }}
-                        .uk-form-controls
-                            input.uk-input(type="file", @change="onImageSelected")
-                            span(v-if="imageFilename", v-html="stringParams(strings.admin_level_lbl_image_provided, imageFilename)")
-                            template(v-if="data.imageurl")
-                                br
-                                img(:src="data.imageurl", :width="200")
+
+                    vk-grid(matched).uk-grid-divider
+                        div.uk-width-1-2
+                            .uk-margin-small
+                                label.uk-form-label {{ strings.admin_level_lbl_name }}
+                                .uk-form-controls
+                                    input.uk-input(v-model="data.name", :placeholder="strings.admin_level_lbl_name")
+                            .uk-margin-small
+                                label.uk-form-label {{ strings.admin_level_lbl_bgcolor }}
+                                .uk-form-controls
+                                    input.uk-input(v-model="data.bgcolor", :placeholder="strings.admin_level_lbl_bgcolor")
+                                    i(v-html="strings.admin_level_lbl_bgcolor_help")
+                            .uk-margin-small
+                                label.uk-form-label {{ strings.admin_level_lbl_fgcolor }}
+                                .uk-form-controls
+                                    input.uk-input(v-model="data.fgcolor", :placeholder="strings.admin_level_lbl_fgcolor")
+                                    i(v-html="strings.admin_level_lbl_fgcolor_help")
+                            .uk-margin-small
+                                label.uk-form-label {{ strings.admin_level_lbl_image }}
+                                .uk-form-controls
+                                    input.uk-input(type="file", @change="onImageSelected")
+                                    span(v-if="imageFilename", v-html="stringParams(strings.admin_level_lbl_image_provided, imageFilename)")
+                        div.uk-width-1-2
+                            level(:level="data", :strings="strings")
+
                     h3.uk-margin-large-top {{ strings.admin_level_lbl_categories }}
                     .uk-margin-small(v-for="(category, index) in categories", :key="index")
                         label.uk-form-label {{ strings.admin_level_lbl_category | stringParams(index + 1) }}
@@ -66,6 +69,7 @@
     import loadingAlert from "../helper/loading-alert";
     import btnAdd from './btn-add';
     import VkNotification from "vuikit/src/library/notification/components/notification";
+    import Level from "../helper/level";
 
     export default {
         mixins: [mixins],
@@ -195,6 +199,7 @@
             },
         },
         components: {
+            Level,
             loadingAlert,
             btnAdd,
             VkNotification,

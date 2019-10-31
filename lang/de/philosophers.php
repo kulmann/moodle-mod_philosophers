@@ -68,6 +68,11 @@ $string['highscore_mode_average'] = 'Durchschnittliche Gewinnstufe';
 $string['highscore_mode_help'] = 'Bitte wählen Sie den Bewertungs-Modus, wie Ergebnisse in die Bestenliste einfließen sollen.';
 $string['highscore_teachers'] = 'Dozenten in Highscore Liste?';
 $string['highscore_teachers_help'] = 'Wenn diese Option aktiviert ist, werden die Spiel-Ergebnisse der Dozenten mit in der Highscore Liste angezeigt.';
+$string['level_tile_height'] = 'Kachel-Höhe Levels';
+$string['level_tile_height_help'] = 'Wählen Sie für die Darstellung von Levels eine Kachel-Höhe.';
+$string['level_tile_height_0'] = 'Flach';
+$string['level_tile_height_1'] = 'Normal';
+$string['level_tile_height_2'] = 'Hoch';
 
 /* activity edit page: control */
 $string['control_edit'] = 'Steuerung';

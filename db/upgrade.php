@@ -42,8 +42,17 @@ function xmldb_philosophers_upgrade($oldversion = 0) {
         $servicerecord->methodname = 'cancel_gamesession';
         $servicerecord->component = 'mod_philosophers';
         $DB->insert_record('external_functions', $servicerecord);
+        upgrade_mod_savepoint(true, 2019083001, 'philosophers');
     }
 
+    if ($oldversion < 2019103001) {
+        $table = new xmldb_table('philosophers');
+        $field = new xmldb_field('level_tile_height', XMLDB_TYPE_INTEGER, '5', null, null, null, '1');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        upgrade_mod_savepoint(true, 2019103001, 'philosophers');
+    }
 
     return true;
 }

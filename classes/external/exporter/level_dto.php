@@ -118,6 +118,10 @@ class level_dto extends exporter {
                 'type' => PARAM_BOOL,
                 'description' => 'whether or not this level has been seen by the user (i.e. if a question was shown)',
             ],
+            'tile_height_px' => [
+                'type' => PARAM_INT,
+                'description' => 'the height of the level tiles in pixels',
+            ],
         ];
     }
 
@@ -136,8 +140,20 @@ class level_dto extends exporter {
                 'correct' => $this->question ? $this->question->is_correct() : false,
                 'score' => $this->question ? $this->question->get_score() : 0,
                 'seen' => $this->question !== null,
+                'tile_height_px' => $this->get_level_tile_height_px(),
             ]
         );
         return $result;
+    }
+
+    private function get_level_tile_height_px() {
+        switch($this->game->get_level_tile_height()) {
+            case MOD_PHILOSOPHERS_LEVEL_TILE_HEIGHT_SMALL:
+                return 60;
+            case MOD_PHILOSOPHERS_LEVEL_TILE_HEIGHT_MEDIUM:
+                return 120;
+            case MOD_PHILOSOPHERS_LEVEL_TILE_HEIGHT_LARGE:
+                return 200;
+        }
     }
 }

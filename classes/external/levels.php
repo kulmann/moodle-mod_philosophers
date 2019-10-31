@@ -444,14 +444,14 @@ class levels extends external_api {
         $level->set_fgcolor($fgcolor);
         $level->save();
 
-        // save / delete image
-        if ($imgcontent) {
-            // save image if provided in UI (we need an entry id for that, so do that after initial save)
-            $level->store_image($coursemodule->context, $imgmimetype, $imgcontent);
-            $level->save();
-        } else if (!empty($level->get_image()) && empty($image)) {
-            // image was cleared in UI. delete it
+        // image was cleared in UI. delete it
+        if (!empty($level->get_image()) && empty($image)) {
             $level->delete_image($coursemodule->context);
+            $level->save();
+        }
+        // save image if provided in UI (we need an entry id for that, so do that after initial save)
+        if ($imgcontent) {
+            $level->store_image($coursemodule->context, $imgmimetype, $imgcontent);
             $level->save();
         }
 
