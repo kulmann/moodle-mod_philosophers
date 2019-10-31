@@ -431,6 +431,21 @@ class game extends abstract_model {
     }
 
     /**
+     * @return int
+     */
+    public function get_level_tile_height_px() {
+        switch($this->get_level_tile_height()) {
+            case MOD_PHILOSOPHERS_LEVEL_TILE_HEIGHT_SMALL:
+                return 60;
+            case MOD_PHILOSOPHERS_LEVEL_TILE_HEIGHT_LARGE:
+                return 200;
+            case MOD_PHILOSOPHERS_LEVEL_TILE_HEIGHT_MEDIUM:
+            default:
+                return 120;
+        }
+    }
+
+    /**
      * @param int $level_tile_height
      */
     public function set_level_tile_height(int $level_tile_height): void {

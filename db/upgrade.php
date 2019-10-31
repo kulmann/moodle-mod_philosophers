@@ -53,6 +53,14 @@ function xmldb_philosophers_upgrade($oldversion = 0) {
         }
         upgrade_mod_savepoint(true, 2019103001, 'philosophers');
     }
+    if ($oldversion < 2019103002) {
+        $table = new xmldb_table('philosophers_levels');
+        $field = new xmldb_field('fgcolor');
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+        upgrade_mod_savepoint(true, 2019103002, 'philosophers');
+    }
 
     return true;
 }
