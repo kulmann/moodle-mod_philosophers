@@ -7,28 +7,33 @@
                 form.uk-form-stacked
                     h3(v-if="editing") {{ strings.admin_level_title_edit | stringParams(data.position + 1) }}
                     h3(v-else) {{ strings.admin_level_title_add | stringParams(data.position + 1) }}
-                    .uk-margin-small
-                        label.uk-form-label {{ strings.admin_level_lbl_name }}
-                        .uk-form-controls
-                            input.uk-input(v-model="data.name", :placeholder="strings.admin_level_lbl_name")
-                    .uk-margin-small
-                        label.uk-form-label {{ strings.admin_level_lbl_bgcolor }}
-                        .uk-form-controls
-                            input.uk-input(v-model="data.bgcolor", :placeholder="strings.admin_level_lbl_bgcolor")
-                            i(v-html="strings.admin_level_lbl_bgcolor_help")
-                    .uk-margin-small
-                        label.uk-form-label {{ strings.admin_level_lbl_fgcolor }}
-                        .uk-form-controls
-                            input.uk-input(v-model="data.fgcolor", :placeholder="strings.admin_level_lbl_fgcolor")
-                            i(v-html="strings.admin_level_lbl_fgcolor_help")
-                    .uk-margin-small
-                        label.uk-form-label {{ strings.admin_level_lbl_image }}
-                        .uk-form-controls
-                            input.uk-input(type="file", @change="onImageSelected")
-                            span(v-if="imageFilename", v-html="stringParams(strings.admin_level_lbl_image_provided, imageFilename)")
-                            template(v-if="data.imageurl")
-                                br
-                                img(:src="data.imageurl", :width="200")
+
+                    vk-grid(matched).uk-grid-divider
+                        div.uk-width-1-2
+                            .uk-margin-small
+                                label.uk-form-label {{ strings.admin_level_lbl_name }}
+                                .uk-form-controls
+                                    input.uk-input(v-model="data.name", :placeholder="strings.admin_level_lbl_name")
+                            .uk-margin-small
+                                label.uk-form-label {{ strings.admin_level_lbl_bgcolor }}
+                                .uk-form-controls
+                                    input.uk-input(v-model="data.bgcolor", :placeholder="strings.admin_level_lbl_bgcolor")
+                                    i(v-html="strings.admin_level_lbl_bgcolor_help")
+                            .uk-margin-small
+                                label.uk-form-label {{ strings.admin_level_lbl_image }}
+                                .uk-form-controls
+                                    picture-input(:width="500",
+                                        :height="300",
+                                        :removable="true",
+                                        button-class="btn btn-primary",
+                                        removeButtonClass="btn btn-danger",
+                                        :customStrings="{drag: strings.admin_level_lbl_image_drag, change: strings.admin_level_lbl_image_change, remove: strings.admin_level_lbl_image_remove}",
+                                        :prefill="data.imageurl",
+                                        @change="onImageSelected",
+                                        @remove="onImageRemoved")
+                        div.uk-width-1-2
+                            level(:level="levelPreview", :strings="strings")
+
                     h3.uk-margin-large-top {{ strings.admin_level_lbl_categories }}
                     .uk-margin-small(v-for="(category, index) in categories", :key="index")
                         label.uk-form-label {{ strings.admin_level_lbl_category | stringParams(index + 1) }}
@@ -66,6 +71,8 @@
     import loadingAlert from "../helper/loading-alert";
     import btnAdd from './btn-add';
     import VkNotification from "vuikit/src/library/notification/components/notification";
+    import Level from "../helper/level";
+    import PictureInput from 'vue-picture-input';
 
     export default {
         mixins: [mixins],
@@ -77,9 +84,9 @@
                 data: null,
                 categories: null,
                 saving: false,
+                imageBase64: null,
                 imageMimetype: null,
                 imageContent: null,
-                imageFilename: null,
             }
         },
         computed: {
@@ -90,6 +97,13 @@
                 'levelCategories',
                 'mdl_categories'
             ]),
+            levelPreview() {
+                let preview = _.clone(this.data);
+                if (this.imageBase64) {
+                    preview.imageurl = this.imageBase64;
+                }
+                return preview;
+            },
             editing() {
                 return this.level !== null && this.categories !== null;
             },
@@ -113,11 +127,11 @@
                         game: this.game.id,
                         name: '',
                         bgcolor: '',
-                        fgcolor: '',
                         image: '',
                         imageurl: '',
                         imgmimetype: null,
                         imgcontent: null,
+                        tile_height_px: this.game.level_tile_height_px,
                     };
                     this.categories = [];
                 } else {
@@ -153,7 +167,6 @@
                     levelid: (this.data.id || 0),
                     name: this.data.name,
                     bgcolor: this.data.bgcolor,
-                    fgcolor: this.data.fgcolor,
                     categories: categories,
                     image: this.data.image,
                     imgmimetype: (this.imageMimetype ? this.imageMimetype : ''),
@@ -168,19 +181,19 @@
                         }
                     });
             },
-            onImageSelected(event) {
-                let file = event.target.files[0];
-                if (file.type.startsWith('image/')) {
-                    this.imageFilename = file.name;
-                    let reader = new FileReader();
-                    reader.onloadend = function () {
-                        let result = reader.result.split(',');
-                        this.imageMimetype = result[0].replace('data:', '').replace(';base64', '');
-                        this.imageContent = result[1];
-                    }.bind(this);
-                    reader.readAsDataURL(file);
-                }
+            onImageSelected(image) {
+                this.imageBase64 = image;
+                let result = image.split(',');
+                this.imageMimetype = result[0].replace('data:', '').replace(';base64', '');
+                this.imageContent = result[1];
             },
+            onImageRemoved() {
+                this.imageBase64 = null;
+                this.imageMimetype = null;
+                this.imageContent = null;
+                this.data.image = null;
+                this.data.imageurl = null;
+            }
         },
         mounted() {
             this.fetchMdlCategories();
@@ -195,9 +208,11 @@
             },
         },
         components: {
+            Level,
             loadingAlert,
             btnAdd,
             VkNotification,
+            PictureInput,
         },
     }
 </script>

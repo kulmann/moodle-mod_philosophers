@@ -41,7 +41,7 @@ class mod_philosophers_mod_form extends moodleform_mod {
      * Defines forms elements
      */
     public function definition() {
-        global $CFG, $DB;
+        global $CFG;
 
         $mform = $this->_form;
 
@@ -107,6 +107,15 @@ class mod_philosophers_mod_form extends moodleform_mod {
         $mform->addElement('advcheckbox', 'highscore_teachers', get_string('highscore_teachers', 'philosophers'), '&nbsp;');
         $mform->setDefault('highscore_teachers', 0);
         $mform->addHelpButton('highscore_teachers', 'highscore_teachers', 'philosophers');
+
+        // ... tile height for level cards
+        $level_tile_heights = [];
+        foreach (MOD_PHILOSOPHERS_LEVEL_TILE_HEIGHTS as $height) {
+            $level_tile_heights[$height] = get_string('level_tile_height_' . $height, 'philosophers');
+        }
+        $mform->addElement('select', 'level_tile_height', get_string('level_tile_height', 'philosophers'), $level_tile_heights);
+        $mform->setDefault('level_tile_height', MOD_PHILOSOPHERS_LEVEL_TILE_HEIGHT_MEDIUM);
+        $mform->addHelpButton('level_tile_height', 'level_tile_height', 'philosophers');
 
         // Add standard grading elements.
         $this->standard_grading_coursemodule_elements();

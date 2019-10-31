@@ -68,6 +68,11 @@ $string['highscore_mode_average'] = 'Durchschnittliche Gewinnstufe';
 $string['highscore_mode_help'] = 'Bitte wählen Sie den Bewertungs-Modus, wie Ergebnisse in die Bestenliste einfließen sollen.';
 $string['highscore_teachers'] = 'Dozenten in Highscore Liste?';
 $string['highscore_teachers_help'] = 'Wenn diese Option aktiviert ist, werden die Spiel-Ergebnisse der Dozenten mit in der Highscore Liste angezeigt.';
+$string['level_tile_height'] = 'Kachel-Höhe Levels';
+$string['level_tile_height_help'] = 'Wählen Sie für die Darstellung von Levels eine Kachel-Höhe.';
+$string['level_tile_height_0'] = 'Flach';
+$string['level_tile_height_1'] = 'Normal';
+$string['level_tile_height_2'] = 'Hoch';
 
 /* activity edit page: control */
 $string['control_edit'] = 'Steuerung';
@@ -98,10 +103,10 @@ $string['admin_level_loading'] = 'Lade Level-Daten';
 $string['admin_level_lbl_name'] = 'Name';
 $string['admin_level_lbl_bgcolor'] = 'Hintergrund-Farbe';
 $string['admin_level_lbl_bgcolor_help'] = 'HEX-Format, mit oder ohne #, im 3er oder 6er Format. Beispiel: #cc0033 oder #c03';
-$string['admin_level_lbl_fgcolor'] = 'Schrift-Farbe';
-$string['admin_level_lbl_fgcolor_help'] = 'HEX-Format, mit oder ohne #, im 3er oder 6er Format. Beispiel: #ffffff oder #fff';
 $string['admin_level_lbl_image'] = 'Hintergrund-Bild';
-$string['admin_level_lbl_image_provided'] = 'Neue Bilddatei: <i>{$a}</i>';
+$string['admin_level_lbl_image_drag'] = 'Hochladen via Drag&Drop oder Auswahl';
+$string['admin_level_lbl_image_change'] = 'Ändern';
+$string['admin_level_lbl_image_remove'] = 'Entfernen';
 $string['admin_level_lbl_categories'] = 'Fragen-Zuweisungen';
 $string['admin_level_lbl_category'] = 'Kategorie {$a}';
 $string['admin_level_lbl_category_please_select'] = 'Kategorie auswählen';

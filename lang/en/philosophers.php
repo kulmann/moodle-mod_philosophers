@@ -68,6 +68,11 @@ $string['highscore_mode_average'] = 'Average score';
 $string['highscore_mode_help'] = 'Please select which scoring mode you want to use for the highscore calculation of a user.';
 $string['highscore_teachers'] = 'Teachers in leader board';
 $string['highscore_teachers_help'] = 'If enabled teachers\' scores will appear in the leader board.';
+$string['level_tile_height'] = 'Level tile height';
+$string['level_tile_height_help'] = 'Please select the height for level tile representation.';
+$string['level_tile_height_0'] = 'Flat';
+$string['level_tile_height_1'] = 'Regular';
+$string['level_tile_height_2'] = 'Tall';
 
 /* activity edit page: control */
 $string['control_edit'] = 'Control';
@@ -98,10 +103,10 @@ $string['admin_level_loading'] = 'Loading level data';
 $string['admin_level_lbl_name'] = 'Name';
 $string['admin_level_lbl_bgcolor'] = 'Background Color';
 $string['admin_level_lbl_bgcolor_help'] = 'HEX format, with or without #, as 3 or 6 chars. Example: #cc0033 or #c03';
-$string['admin_level_lbl_fgcolor'] = 'Text Color';
-$string['admin_level_lbl_fgcolor_help'] = 'HEX format, with or without #, as 3 or 6 chars. Example: #ffffff or #fff';
 $string['admin_level_lbl_image'] = 'Background Image';
-$string['admin_level_lbl_image_provided'] = 'New image file: <i>{$a}</i>';
+$string['admin_level_lbl_image_drag'] = 'Upload via drag&drop or select';
+$string['admin_level_lbl_image_change'] = 'Change';
+$string['admin_level_lbl_image_remove'] = 'Remove';
 $string['admin_level_lbl_categories'] = 'Question assignments';
 $string['admin_level_lbl_category'] = 'Category {$a}';
 $string['admin_level_lbl_category_please_select'] = 'Select category';

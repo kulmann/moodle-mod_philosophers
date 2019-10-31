@@ -97,6 +97,10 @@ class game_dto extends exporter {
                 'type' => PARAM_INT,
                 'description' => 'the number of seconds until after the question is answered the game goes back to the level overview',
             ],
+            'level_tile_height_px' => [
+                'type' => PARAM_INT,
+                'description' => 'the height of the level tiles in pixels',
+            ],
         ];
     }
 
@@ -116,6 +120,7 @@ class game_dto extends exporter {
             'mdl_user_teacher' => util::user_has_capability('mod/philosophers:manage', $this->ctx, $this->user->id),
             'question_duration' => $this->game->get_question_duration(),
             'review_duration' => $this->game->get_review_duration(),
+            'level_tile_height_px' => $this->game->get_level_tile_height_px(),
         ];
     }
 }

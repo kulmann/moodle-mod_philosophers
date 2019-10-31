@@ -82,6 +82,10 @@ class game extends abstract_model {
      * @var bool Whether or not the levels should be shuffled in the level overview.
      */
     protected $shuffle_levels;
+    /**
+     * @var int One of the tile height categories (see lib.php).
+     */
+    protected $level_tile_height;
 
     /**
      * game constructor.
@@ -101,6 +105,7 @@ class game extends abstract_model {
         $this->highscore_mode = MOD_PHILOSOPHERS_HIGHSCORE_MODE_BEST;
         $this->highscore_teachers = false;
         $this->shuffle_levels = false;
+        $this->level_tile_height = MOD_PHILOSOPHERS_LEVEL_TILE_HEIGHT_MEDIUM;
     }
 
     /**
@@ -128,6 +133,7 @@ class game extends abstract_model {
         $this->highscore_mode = isset($data['highscore_mode']) ? $data['highscore_mode'] : MOD_PHILOSOPHERS_HIGHSCORE_MODE_BEST;
         $this->highscore_teachers = isset($data['highscore_teachers']) ? ($data['highscore_teachers'] == 1) : false;
         $this->shuffle_levels = isset($data['shuffle_levels']) ? ($data['shuffle_levels'] == 1) : false;
+        $this->level_tile_height = isset($data['level_tile_height']) ? $data['level_tile_height'] : MOD_PHILOSOPHERS_LEVEL_TILE_HEIGHT_MEDIUM;
     }
 
     /**
@@ -415,5 +421,34 @@ class game extends abstract_model {
      */
     public function set_shuffle_levels(bool $shuffle_levels) {
         $this->shuffle_levels = $shuffle_levels;
+    }
+
+    /**
+     * @return int
+     */
+    public function get_level_tile_height(): int {
+        return $this->level_tile_height;
+    }
+
+    /**
+     * @return int
+     */
+    public function get_level_tile_height_px() {
+        switch($this->get_level_tile_height()) {
+            case MOD_PHILOSOPHERS_LEVEL_TILE_HEIGHT_SMALL:
+                return 60;
+            case MOD_PHILOSOPHERS_LEVEL_TILE_HEIGHT_LARGE:
+                return 200;
+            case MOD_PHILOSOPHERS_LEVEL_TILE_HEIGHT_MEDIUM:
+            default:
+                return 120;
+        }
+    }
+
+    /**
+     * @param int $level_tile_height
+     */
+    public function set_level_tile_height(int $level_tile_height): void {
+        $this->level_tile_height = $level_tile_height;
     }
 }

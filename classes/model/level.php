@@ -55,10 +55,6 @@ class level extends abstract_model {
      * @var string The hex code of the bg color of the level.
      */
     protected $bgcolor;
-    /**
-     * @var string The hex code of the fg color of the level.
-     */
-    protected $fgcolor;
 
     /**
      * level constructor.
@@ -71,7 +67,6 @@ class level extends abstract_model {
         $this->position = -1;
         $this->image = '';
         $this->bgcolor = '#ccc';
-        $this->fgcolor = '#000';
     }
 
     /**
@@ -92,7 +87,6 @@ class level extends abstract_model {
         $this->position = isset($data['position']) ? $data['position'] : 0;
         $this->image = isset($data['image']) ? $data['image'] : '';
         $this->bgcolor = isset($data['bgcolor']) ? $data['bgcolor'] : '#ccc';
-        $this->fgcolor = isset($data['fgcolor']) ? $data['fgcolor'] : '#000';
     }
 
     /**
@@ -296,20 +290,6 @@ class level extends abstract_model {
      */
     public function set_bgcolor(string $bgcolor) {
         $this->bgcolor = $this->to_valid_hex_string($bgcolor);
-    }
-
-    /**
-     * @return string
-     */
-    public function get_fgcolor(): string {
-        return $this->fgcolor;
-    }
-
-    /**
-     * @param string $fgcolor
-     */
-    public function set_fgcolor(string $fgcolor) {
-        $this->fgcolor = $this->to_valid_hex_string($fgcolor);
     }
 
     /**

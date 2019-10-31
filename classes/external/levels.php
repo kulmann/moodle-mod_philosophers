@@ -361,7 +361,6 @@ class levels extends external_api {
             'levelid' => new external_value(PARAM_INT, 'the id of the level'),
             'name' => new external_value(PARAM_TEXT, 'name of the level'),
             'bgcolor' => new external_value(PARAM_TEXT, 'the background color for level representation'),
-            'fgcolor' => new external_value(PARAM_TEXT, 'the foreground color for level representation'),
             'categories' => new external_multiple_structure(new external_single_structure([
                 'categoryid' => new external_value(PARAM_INT, 'the id in our category db table'),
                 'mdlcategory' => new external_value(PARAM_INT, 'the moodle category id'),
@@ -389,7 +388,6 @@ class levels extends external_api {
      * @param int $levelid
      * @param string $name
      * @param string $bgcolor
-     * @param string $fgcolor
      * @param array $categories
      * @param string $image
      * @param string $imgmimetype
@@ -403,13 +401,12 @@ class levels extends external_api {
      * @throws moodle_exception
      * @throws restricted_context_exception
      */
-    public static function save_level($coursemoduleid, $levelid, $name, $bgcolor, $fgcolor, $categories, $image, $imgmimetype, $imgcontent) {
+    public static function save_level($coursemoduleid, $levelid, $name, $bgcolor, $categories, $image, $imgmimetype, $imgcontent) {
         $params = [
             'coursemoduleid' => $coursemoduleid,
             'levelid' => $levelid,
             'name' => $name,
             'bgcolor' => $bgcolor,
-            'fgcolor' => $fgcolor,
             'categories' => $categories,
             'image' => $image,
             'imgmimetype' => $imgmimetype,
@@ -441,17 +438,16 @@ class levels extends external_api {
         }
         $level->set_name($name);
         $level->set_bgcolor($bgcolor);
-        $level->set_fgcolor($fgcolor);
         $level->save();
 
-        // save / delete image
-        if ($imgcontent) {
-            // save image if provided in UI (we need an entry id for that, so do that after initial save)
-            $level->store_image($coursemodule->context, $imgmimetype, $imgcontent);
-            $level->save();
-        } else if (!empty($level->get_image()) && empty($image)) {
-            // image was cleared in UI. delete it
+        // image was cleared in UI. delete it
+        if (!empty($level->get_image()) && empty($image)) {
             $level->delete_image($coursemodule->context);
+            $level->save();
+        }
+        // save image if provided in UI (we need an entry id for that, so do that after initial save)
+        if ($imgcontent) {
+            $level->store_image($coursemodule->context, $imgmimetype, $imgcontent);
             $level->save();
         }
 

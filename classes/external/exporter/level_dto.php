@@ -90,10 +90,6 @@ class level_dto extends exporter {
                 'type' => PARAM_TEXT,
                 'description' => 'background color hex code for level representation',
             ],
-            'fgcolor' => [
-                'type' => PARAM_TEXT,
-                'description' => 'foreground color hex code for level representation',
-            ],
             'image' => [
                 'type' => PARAM_TEXT,
                 'description' => 'filename of background image for level representation',
@@ -118,6 +114,10 @@ class level_dto extends exporter {
                 'type' => PARAM_BOOL,
                 'description' => 'whether or not this level has been seen by the user (i.e. if a question was shown)',
             ],
+            'tile_height_px' => [
+                'type' => PARAM_INT,
+                'description' => 'the height of the level tiles in pixels',
+            ],
         ];
     }
 
@@ -136,6 +136,7 @@ class level_dto extends exporter {
                 'correct' => $this->question ? $this->question->is_correct() : false,
                 'score' => $this->question ? $this->question->get_score() : 0,
                 'seen' => $this->question !== null,
+                'tile_height_px' => $this->game->get_level_tile_height_px(),
             ]
         );
         return $result;
