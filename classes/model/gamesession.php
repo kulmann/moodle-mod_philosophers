@@ -310,7 +310,7 @@ class gamesession extends abstract_model {
     /**
      * @param string $levels_order
      */
-    public function set_levels_order(string $levels_order): void {
+    public function set_levels_order(string $levels_order) {
         $this->levels_order = $levels_order;
     }
 }

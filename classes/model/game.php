@@ -448,7 +448,7 @@ class game extends abstract_model {
     /**
      * @param int $level_tile_height
      */
-    public function set_level_tile_height(int $level_tile_height): void {
+    public function set_level_tile_height(int $level_tile_height) {
         $this->level_tile_height = $level_tile_height;
     }
 }
