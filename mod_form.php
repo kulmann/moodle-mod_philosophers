@@ -95,14 +95,6 @@ class mod_philosophers_mod_form extends moodleform_mod {
         $mform->setType('highscore_count', PARAM_INT);
         $mform->setDefault('highscore_count', 5);
         $mform->addHelpButton('highscore_count', 'highscore_count', 'philosophers');
-        // ... highscore mode
-        $highscore_modes = [];
-        foreach (MOD_PHILOSOPHERS_HIGHSCORE_MODES as $mode) {
-            $highscore_modes[$mode] = get_string('highscore_mode_' . $mode, 'philosophers');
-        }
-        $mform->addElement('select', 'highscore_mode', get_string('highscore_mode', 'philosophers'), $highscore_modes);
-        $mform->setDefault('highscore_mode', MOD_PHILOSOPHERS_HIGHSCORE_MODE_BEST);
-        $mform->addHelpButton('highscore_mode', 'highscore_mode', 'philosophers');
         // ... whether teachers are shown in highscore
         $mform->addElement('advcheckbox', 'highscore_teachers', get_string('highscore_teachers', 'philosophers'), '&nbsp;');
         $mform->setDefault('highscore_teachers', 0);

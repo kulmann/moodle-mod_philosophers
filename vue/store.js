@@ -24,7 +24,12 @@ export const store = new Vuex.Store({
         gameSession: null,
         question: null,
         gameMode: MODE_INTRO,
-        scores: [],
+        scores: {
+            day: [],
+            week: [],
+            month: [],
+            all: [],
+        },
         mdl_question: null,
         mdl_answers: [],
         mdl_categories: null,
@@ -88,8 +93,8 @@ export const store = new Vuex.Store({
                 level.seen = true;
             }
         },
-        setScores(state, scores) {
-            state.scores = scores;
+        setScores(state, payload) {
+            state.scores[payload.span] = payload.scores;
         },
     },
     actions: {
@@ -235,7 +240,7 @@ export const store = new Vuex.Store({
                 let args = {
                     'gamesessionid': this.state.gameSession.id
                 };
-                const gameSession = await ajax('mod_philosophers_cancel_gamesession', args);
+                await ajax('mod_philosophers_cancel_gamesession', args);
                 context.commit('setGameSession', null);
                 return context.dispatch('fetchLevels');
             }
@@ -283,12 +288,13 @@ export const store = new Vuex.Store({
          * Fetches scores according to the current scoring mode of the game.
          *
          * @param context
+         * @param payload
          *
          * @returns {Promise<void>}
          */
-        async fetchScores(context) {
-            const scores = await ajax('mod_philosophers_get_scores_global');
-            context.commit('setScores', scores);
+        async fetchScores(context, payload) {
+            const scores = await ajax('mod_philosophers_get_scores_global', payload);
+            context.commit('setScores', {span: payload.span, scores: scores});
         },
         /**
          * Changes the position (+1 or -1) of the level and does the opposite to the other level.

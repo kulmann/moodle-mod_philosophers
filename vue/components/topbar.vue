@@ -4,9 +4,9 @@
             button.btn.uk-margin-small-left(@click="restartGame", :class="{'btn-primary': isGameOver, 'btn-default': !isGameOver}")
                 v-icon(name="redo").uk-margin-small-right
                 span {{ strings.game_btn_restart }}
-            button.btn.btn-default.uk-margin-small-left(@click="showStats", v-if="statsButtonVisible")
+            button.btn.btn-default.uk-margin-small-left(@click="showHighscore", v-if="highscoreButtonVisible")
                 v-icon(name="chart-line").uk-margin-small-right
-                span {{ strings.game_btn_stats }}
+                span {{ strings.game_btn_highscore }}
             button.btn.btn-default.uk-margin-small-left(@click="showGame", v-if="gameButtonVisible")
                 v-icon(name="gamepad").uk-margin-small-right
                 span {{ strings.game_btn_game }}
@@ -19,7 +19,7 @@
 
 <script>
     import {mapActions, mapMutations, mapState} from 'vuex';
-    import {GAME_PROGRESS, MODE_HELP, MODE_LEVELS, MODE_QUESTION, MODE_STATS} from "../constants";
+    import {GAME_PROGRESS, MODE_HELP, MODE_LEVELS, MODE_QUESTION, MODE_HIGHSCORE} from "../constants";
     import _ from 'lodash';
     import mixins from '../mixins';
 
@@ -45,14 +45,14 @@
             isGameOver() {
                 return this.gameSession === null || this.gameSession.state !== GAME_PROGRESS;
             },
-            statsButtonVisible() {
-                return this.gameMode !== MODE_STATS || !this.isGameScreen;
+            highscoreButtonVisible() {
+                return this.gameMode !== MODE_HIGHSCORE || !this.isGameScreen;
             },
             gameButtonVisible() {
                 if (this.gameSession === null || this.question === null) {
                     return false;
                 }
-                let modes = [MODE_STATS, MODE_HELP];
+                let modes = [MODE_HIGHSCORE, MODE_HELP];
                 return _.includes(modes, this.gameMode) || !this.isGameScreen;
             },
             adminButtonVisible() {
@@ -70,8 +70,8 @@
                 this.createGameSession();
                 this.goToGameRoute();
             },
-            showStats() {
-                this.setGameMode(MODE_STATS);
+            showHighscore() {
+                this.setGameMode(MODE_HIGHSCORE);
                 this.goToGameRoute();
             },
             showGame() {

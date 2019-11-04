@@ -61,6 +61,14 @@ function xmldb_philosophers_upgrade($oldversion = 0) {
         }
         upgrade_mod_savepoint(true, 2019103002, 'philosophers');
     }
+    if ($oldversion < 2019111901) {
+        $table = new xmldb_table('philosophers');
+        $field = new xmldb_field('highscore_mode');
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+        upgrade_mod_savepoint(true, 2019111901, 'philosophers');
+    }
 
     return true;
 }
