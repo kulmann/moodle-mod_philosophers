@@ -26,7 +26,6 @@
                        COMMENT="The reading speed of the user."/>
                 <FIELD NAME="question_chances" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
                 <FIELD NAME="highscore_count" TYPE="int" LENGTH="5" NOTNULL="false" DEFAULT="5" SEQUENCE="false"/>
-                <FIELD NAME="highscore_mode" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="best" SEQUENCE="false"/>
                 <FIELD NAME="highscore_teachers" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
                 <FIELD NAME="completionrounds" TYPE="int" LENGTH="9" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
                 <FIELD NAME="completionpoints" TYPE="int" LENGTH="9" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>

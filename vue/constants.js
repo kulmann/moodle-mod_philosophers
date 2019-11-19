@@ -1,12 +1,12 @@
 export const MODE_INTRO = 'intro';
 export const MODE_HELP = 'help';
-export const MODE_STATS = 'stats';
+export const MODE_HIGHSCORE = 'highscore';
 export const MODE_LEVELS = 'levels';
 export const MODE_QUESTION = 'question';
 export const VALID_MODES = [
     MODE_INTRO,
     MODE_HELP,
-    MODE_STATS,
+    MODE_HIGHSCORE,
     MODE_LEVELS,
     MODE_QUESTION,
 ];

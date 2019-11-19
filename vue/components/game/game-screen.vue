@@ -8,7 +8,7 @@
                 intro(v-if="introVisible")
                 levels(v-if="levelsVisible")
                 question(v-if="questionVisible")
-                stats(v-if="statsVisible")
+                highscores(v-if="highscoreVisible")
                 help(v-if="helpVisible")
             session(v-if="sessionVisible")
 </template>
@@ -22,10 +22,10 @@
     import loadingAlert from '../helper/loading-alert';
     import session from './session';
     import question from './question/question';
-    import stats from './stats';
+    import highscores from './highscore/highscores';
     import topbar from '../topbar';
     import VkGrid from "vuikit/src/library/grid/components/grid";
-    import {MODE_HELP, MODE_INTRO, MODE_LEVELS, MODE_QUESTION, MODE_STATS} from "../../constants";
+    import {MODE_HELP, MODE_INTRO, MODE_LEVELS, MODE_QUESTION, MODE_HIGHSCORE} from "../../constants";
 
     export default {
         mixins: [mixins],
@@ -50,8 +50,8 @@
             sessionVisible() {
                 return this.levelsVisible || this.questionVisible;
             },
-            statsVisible() {
-                return this.gameMode === MODE_STATS;
+            highscoreVisible() {
+                return this.gameMode === MODE_HIGHSCORE;
             },
             helpVisible() {
                 return this.gameMode === MODE_HELP;
@@ -64,7 +64,7 @@
             loadingAlert,
             question,
             session,
-            stats,
+            highscores,
             topbar,
             VkGrid
         }

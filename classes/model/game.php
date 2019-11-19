@@ -71,10 +71,6 @@ class game extends abstract_model {
      */
     protected $highscore_count;
     /**
-     * @var string The way we calculate highscores.
-     */
-    protected $highscore_mode;
-    /**
      * @var bool Whether or not teachers will be shown in the highscore list.
      */
     protected $highscore_teachers;
@@ -102,7 +98,6 @@ class game extends abstract_model {
         $this->question_reading_speed = 0;
         $this->question_chances = 0;
         $this->highscore_count = 5;
-        $this->highscore_mode = MOD_PHILOSOPHERS_HIGHSCORE_MODE_BEST;
         $this->highscore_teachers = false;
         $this->shuffle_levels = false;
         $this->level_tile_height = MOD_PHILOSOPHERS_LEVEL_TILE_HEIGHT_MEDIUM;
@@ -130,7 +125,6 @@ class game extends abstract_model {
         $this->question_reading_speed = isset($data['question_reading_speed']) ? $data['question_reading_speed'] : 0;
         $this->question_chances = isset($data['question_chances']) ? $data['question_chances'] : 0;
         $this->highscore_count = isset($data['highscore_count']) ? $data['highscore_count'] : 5;
-        $this->highscore_mode = isset($data['highscore_mode']) ? $data['highscore_mode'] : MOD_PHILOSOPHERS_HIGHSCORE_MODE_BEST;
         $this->highscore_teachers = isset($data['highscore_teachers']) ? ($data['highscore_teachers'] == 1) : false;
         $this->shuffle_levels = isset($data['shuffle_levels']) ? ($data['shuffle_levels'] == 1) : false;
         $this->level_tile_height = isset($data['level_tile_height']) ? $data['level_tile_height'] : MOD_PHILOSOPHERS_LEVEL_TILE_HEIGHT_MEDIUM;
@@ -351,20 +345,6 @@ class game extends abstract_model {
      */
     public function set_highscore_count(int $highscore_count) {
         $this->highscore_count = $highscore_count;
-    }
-
-    /**
-     * @return string
-     */
-    public function get_highscore_mode(): string {
-        return $this->highscore_mode;
-    }
-
-    /**
-     * @param string $highscore_mode
-     */
-    public function set_highscore_mode(string $highscore_mode) {
-        $this->highscore_mode = $highscore_mode;
     }
 
     /**

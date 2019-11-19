@@ -29,22 +29,10 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use mod_philosophers\form\form_controller;
 use mod_philosophers\model\gamesession;
 use mod_philosophers\model\level;
-use mod_philosophers\util;
 
 defined('MOODLE_INTERNAL') || die();
-
-// different highscore modes
-define('MOD_PHILOSOPHERS_HIGHSCORE_MODE_BEST', 'best');
-define('MOD_PHILOSOPHERS_HIGHSCORE_MODE_LAST', 'last');
-define('MOD_PHILOSOPHERS_HIGHSCORE_MODE_AVERAGE', 'average');
-define('MOD_PHILOSOPHERS_HIGHSCORE_MODES', [
-    MOD_PHILOSOPHERS_HIGHSCORE_MODE_BEST,
-    MOD_PHILOSOPHERS_HIGHSCORE_MODE_LAST,
-    MOD_PHILOSOPHERS_HIGHSCORE_MODE_AVERAGE
-]);
 
 // implemented question types
 define('MOD_PHILOSOPHERS_QTYPE_SINGLE_CHOICE_DB', 'multichoice');
@@ -268,7 +256,7 @@ function philosophers_pluginfile($course, $cm, $context, $filearea, $args, $forc
     if (!$args) {
         $filepath = '/'; // $args is empty => the path is '/'
     } else {
-        $filepath = '/'.implode('/', $args).'/'; // $args contains elements of the filepath
+        $filepath = '/' . implode('/', $args) . '/'; // $args contains elements of the filepath
     }
 
     // Retrieve the file from the Files API.
