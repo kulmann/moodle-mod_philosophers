@@ -21,11 +21,13 @@
         props: {
             strings: Object,
             level: Object,
+            game: Object,
         },
         computed: {
             textStyles() {
+                let alpha = ((100 - this.game.level_tile_alpha) / 100.0);
                 let styles = [
-                    'background-color: rgba(0,0,0,0.5);',
+                    'background-color: rgba(0,0,0,' + alpha + ');',
                     'color: #fff',
                 ];
                 return styles.join(' ');

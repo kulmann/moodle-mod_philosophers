@@ -82,6 +82,10 @@ class game extends abstract_model {
      * @var int One of the tile height categories (see lib.php).
      */
     protected $level_tile_height;
+    /**
+     * @var int The alpha value of the level tile overlay (out of [0,100]).
+     */
+    protected $level_tile_alpha;
 
     /**
      * game constructor.
@@ -101,6 +105,7 @@ class game extends abstract_model {
         $this->highscore_teachers = false;
         $this->shuffle_levels = false;
         $this->level_tile_height = MOD_PHILOSOPHERS_LEVEL_TILE_HEIGHT_MEDIUM;
+        $this->level_tile_alpha = 50;
     }
 
     /**
@@ -128,6 +133,7 @@ class game extends abstract_model {
         $this->highscore_teachers = isset($data['highscore_teachers']) ? ($data['highscore_teachers'] == 1) : false;
         $this->shuffle_levels = isset($data['shuffle_levels']) ? ($data['shuffle_levels'] == 1) : false;
         $this->level_tile_height = isset($data['level_tile_height']) ? $data['level_tile_height'] : MOD_PHILOSOPHERS_LEVEL_TILE_HEIGHT_MEDIUM;
+        $this->level_tile_alpha = isset($data['level_tile_alpha']) ? $data['level_tile_alpha'] : 50;
     }
 
     /**
@@ -243,13 +249,6 @@ class game extends abstract_model {
     }
 
     /**
-     * @param int $timecreated
-     */
-    public function set_timecreated(int $timecreated) {
-        $this->timecreated = $timecreated;
-    }
-
-    /**
      * @return int
      */
     public function get_timemodified(): int {
@@ -299,24 +298,10 @@ class game extends abstract_model {
     }
 
     /**
-     * @param int $question_duration
-     */
-    public function set_question_duration(int $question_duration) {
-        $this->question_duration = $question_duration;
-    }
-
-    /**
      * @return int
      */
     public function get_review_duration(): int {
         return $this->review_duration;
-    }
-
-    /**
-     * @param int $review_duration
-     */
-    public function set_review_duration(int $review_duration) {
-        $this->review_duration = $review_duration;
     }
 
     /**
@@ -327,24 +312,10 @@ class game extends abstract_model {
     }
 
     /**
-     * @param bool $question_shuffle_answers
-     */
-    public function set_question_shuffle_answers(bool $question_shuffle_answers) {
-        $this->question_shuffle_answers = $question_shuffle_answers;
-    }
-
-    /**
      * @return int
      */
     public function get_highscore_count(): int {
         return $this->highscore_count;
-    }
-
-    /**
-     * @param int $highscore_count
-     */
-    public function set_highscore_count(int $highscore_count) {
-        $this->highscore_count = $highscore_count;
     }
 
     /**
@@ -355,24 +326,10 @@ class game extends abstract_model {
     }
 
     /**
-     * @param bool $highscore_teachers
-     */
-    public function set_highscore_teachers(bool $highscore_teachers) {
-        $this->highscore_teachers = $highscore_teachers;
-    }
-
-    /**
      * @return int
      */
     public function get_question_reading_speed(): int {
         return $this->question_reading_speed;
-    }
-
-    /**
-     * @param int $question_reading_speed
-     */
-    public function set_question_reading_speed(int $question_reading_speed) {
-        $this->question_reading_speed = $question_reading_speed;
     }
 
     /**
@@ -383,24 +340,10 @@ class game extends abstract_model {
     }
 
     /**
-     * @param int $question_chances
-     */
-    public function set_question_chances(int $question_chances) {
-        $this->question_chances = $question_chances;
-    }
-
-    /**
      * @return bool
      */
     public function is_shuffle_levels(): bool {
         return $this->shuffle_levels;
-    }
-
-    /**
-     * @param bool $shuffle_levels
-     */
-    public function set_shuffle_levels(bool $shuffle_levels) {
-        $this->shuffle_levels = $shuffle_levels;
     }
 
     /**
@@ -414,7 +357,7 @@ class game extends abstract_model {
      * @return int
      */
     public function get_level_tile_height_px() {
-        switch($this->get_level_tile_height()) {
+        switch ($this->get_level_tile_height()) {
             case MOD_PHILOSOPHERS_LEVEL_TILE_HEIGHT_SMALL:
                 return 60;
             case MOD_PHILOSOPHERS_LEVEL_TILE_HEIGHT_LARGE:
@@ -426,9 +369,9 @@ class game extends abstract_model {
     }
 
     /**
-     * @param int $level_tile_height
+     * @return int
      */
-    public function set_level_tile_height(int $level_tile_height) {
-        $this->level_tile_height = $level_tile_height;
+    public function get_level_tile_alpha() {
+        return $this->level_tile_alpha;
     }
 }

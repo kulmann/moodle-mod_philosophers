@@ -32,7 +32,7 @@
                                         @change="onImageSelected",
                                         @remove="onImageRemoved")
                         div.uk-width-1-2
-                            level(:level="levelPreview", :strings="strings")
+                            level(:level="levelPreview", :strings="strings", :game="game")
 
                     h3.uk-margin-large-top {{ strings.admin_level_lbl_categories }}
                     .uk-margin-small(v-for="(category, index) in categories", :key="index")

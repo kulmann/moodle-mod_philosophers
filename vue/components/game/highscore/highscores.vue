@@ -1,11 +1,11 @@
 <template lang="pug">
-    #philosophers-stats
+    #philosophers-highscore
         .uk-card.uk-card-default
             .uk-card-header
-                h3 {{ strings.game_btn_stats }}
+                h3 {{ strings.game_btn_highscore }}
             .uk-card-body
-                loadingAlert(v-if="loading", :message="strings.game_loading_stats")
-                failureAlert(v-else-if="failed", :message="strings.game_loading_stats_failed")
+                loadingAlert(v-if="loading", :message="strings.game_loading_highscore")
+                failureAlert(v-else-if="failed", :message="strings.game_loading_highscore_failed")
                 template(v-else)
                     ul.uk-tab
                         li(:class="{'uk-active': activeTab === 'day'}")
