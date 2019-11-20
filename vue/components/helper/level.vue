@@ -57,6 +57,7 @@
                 if (level.imageurl) {
                     styles.push('background-image: url(' + level.imageurl + ');');
                     styles.push('background-size: cover;');
+                    styles.push('background-position: center;');
                 }
                 return styles.join(' ');
             },

@@ -1,6 +1,6 @@
 <template lang="pug">
     vk-grid(matched)
-        div(v-for="level in levels", :key="level.id", class="uk-width-1-1@s uk-width-1-2@m")
+        div(v-for="level in levels", :key="level.id", class="uk-width-1-1@s uk-width-1-2@m uk-width-1-3@l uk-width-1-4@xl")
             level(:level="level", :strings="strings", :game="game", @onSelectLevel="selectLevel")
 </template>
 
