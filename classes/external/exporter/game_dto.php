@@ -101,6 +101,10 @@ class game_dto extends exporter {
                 'type' => PARAM_INT,
                 'description' => 'the height of the level tiles in pixels',
             ],
+            'level_tile_alpha' => [
+                'type' => PARAM_INT,
+                'description' => 'the alpha of the level tiles overlay [0-100]',
+            ],
         ];
     }
 
@@ -121,6 +125,7 @@ class game_dto extends exporter {
             'question_duration' => $this->game->get_question_duration(),
             'review_duration' => $this->game->get_review_duration(),
             'level_tile_height_px' => $this->game->get_level_tile_height_px(),
+            'level_tile_alpha' => $this->game->get_level_tile_alpha(),
         ];
     }
 }

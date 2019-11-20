@@ -108,6 +108,14 @@ class mod_philosophers_mod_form extends moodleform_mod {
         $mform->addElement('select', 'level_tile_height', get_string('level_tile_height', 'philosophers'), $level_tile_heights);
         $mform->setDefault('level_tile_height', MOD_PHILOSOPHERS_LEVEL_TILE_HEIGHT_MEDIUM);
         $mform->addHelpButton('level_tile_height', 'level_tile_height', 'philosophers');
+        // ... tile overlay alpha
+        $level_tile_alphas = [];
+        for($i=0; $i<=10; $i++) {
+            $level_tile_alphas[$i * 10] = ($i * 10) . "%";
+        }
+        $mform->addElement('select', 'level_tile_alpha', get_string('level_tile_alpha', 'philosophers'), $level_tile_alphas);
+        $mform->setDefault('level_tile_alpha', 50);
+        $mform->addHelpButton('level_tile_alpha', 'level_tile_alpha', 'philosophers');
 
         // Add standard grading elements.
         $this->standard_grading_coursemodule_elements();

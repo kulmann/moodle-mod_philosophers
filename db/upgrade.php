@@ -69,6 +69,14 @@ function xmldb_philosophers_upgrade($oldversion = 0) {
         }
         upgrade_mod_savepoint(true, 2019111901, 'philosophers');
     }
+    if ($oldversion < 2019112001) {
+        $table = new xmldb_table('philosophers');
+        $field = new xmldb_field('level_tile_alpha', XMLDB_TYPE_INTEGER, '5', null, null, null, '1');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        upgrade_mod_savepoint(true, 2019112001, 'philosophers');
+    }
 
     return true;
 }

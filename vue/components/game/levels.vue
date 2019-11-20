@@ -1,7 +1,7 @@
 <template lang="pug">
     vk-grid(matched)
         div(v-for="level in levels", :key="level.id", class="uk-width-1-1@s uk-width-1-2@m")
-            level(:level="level", :strings="strings", @onSelectLevel="selectLevel")
+            level(:level="level", :strings="strings", :game="game", @onSelectLevel="selectLevel")
 </template>
 
 <script>
@@ -15,6 +15,7 @@
             ...mapState([
                 'strings',
                 'levels',
+                'game',
             ]),
         },
         methods: {
