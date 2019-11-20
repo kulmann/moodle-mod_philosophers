@@ -106,7 +106,7 @@ class mod_philosophers_mod_form extends moodleform_mod {
             $level_tile_heights[$height] = get_string('level_tile_height_' . $height, 'philosophers');
         }
         $mform->addElement('select', 'level_tile_height', get_string('level_tile_height', 'philosophers'), $level_tile_heights);
-        $mform->setDefault('level_tile_height', MOD_PHILOSOPHERS_LEVEL_TILE_HEIGHT_MEDIUM);
+        $mform->setDefault('level_tile_height', MOD_PHILOSOPHERS_LEVEL_TILE_HEIGHT_LARGE);
         $mform->addHelpButton('level_tile_height', 'level_tile_height', 'philosophers');
         // ... tile overlay alpha
         $level_tile_alphas = [];
