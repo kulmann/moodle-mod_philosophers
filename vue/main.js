@@ -17,8 +17,6 @@ function init(coursemoduleid, contextid) {
     Vue.use(VueRouter);
     Vue.component('v-icon', Icon);
 
-    console.log(M);
-
     require('./styles/theme.scss');
 
     store.commit('setCourseModuleID', coursemoduleid);
