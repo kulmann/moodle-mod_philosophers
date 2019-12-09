@@ -46,6 +46,7 @@ class gamesession_dto extends exporter {
      * gamesession_dto constructor.
      *
      * @param gamesession $gamesession
+     * @param game $game
      * @param context $context
      *
      * @throws \coding_exception
