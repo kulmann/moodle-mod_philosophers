@@ -46,6 +46,10 @@ class score_dto extends exporter {
     /**
      * @var int
      */
+    private $maxscore;
+    /**
+     * @var int
+     */
     private $sessions;
     /**
      * @var int
@@ -65,6 +69,7 @@ class score_dto extends exporter {
      *
      * @param int $rank
      * @param float $score
+     * @param int $maxscore
      * @param int $sessions
      * @param int $mdl_user
      * @param string $mdl_user_name
@@ -73,9 +78,10 @@ class score_dto extends exporter {
      *
      * @throws coding_exception
      */
-    public function __construct($rank, $score, $sessions, $mdl_user, $mdl_user_name, $teacher, context $context) {
+    public function __construct($rank, $score, $maxscore, $sessions, $mdl_user, $mdl_user_name, $teacher, context $context) {
         $this->rank = $rank;
         $this->score = $score;
+        $this->maxscore = $maxscore;
         $this->sessions = $sessions;
         $this->mdl_user = $mdl_user;
         $this->mdl_user_name = $mdl_user_name;
@@ -92,6 +98,10 @@ class score_dto extends exporter {
             'score' => [
                 'type' => PARAM_FLOAT,
                 'description' => 'score',
+            ],
+            'maxscore' => [
+                'type' => PARAM_INT,
+                'description' => 'max score of one game session',
             ],
             'sessions' => [
                 'type' => PARAM_INT,
@@ -122,6 +132,7 @@ class score_dto extends exporter {
         return [
             'rank' => $this->rank,
             'score' => $this->score,
+            'maxscore' => $this->maxscore,
             'sessions' => $this->sessions,
             'mdl_user' => $this->mdl_user,
             'mdl_user_name' => $this->mdl_user_name,

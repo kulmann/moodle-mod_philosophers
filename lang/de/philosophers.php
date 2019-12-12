@@ -138,4 +138,5 @@ $string['game_stats_all'] = 'Gesamt';
 $string['game_stats_rank'] = 'Platz';
 $string['game_stats_user'] = 'Nutzer';
 $string['game_stats_score'] = 'Punkte';
+$string['game_stats_maxscore'] = 'Beste Runde';
 $string['game_stats_sessions'] = 'Versuche';

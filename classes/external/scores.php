@@ -89,7 +89,7 @@ class scores extends external_api {
         $game = util::get_game($coursemodule);
 
         list($andwhere, $timestamp) = self::get_scores_global_where_params($span);
-        $sql = "SELECT gs.mdl_user, SUM(gs.score) AS score, COUNT(gs.score) AS sessions, CONCAT(u.firstname, ' ', u.lastname) AS mdl_user_name
+        $sql = "SELECT gs.mdl_user, SUM(gs.score) AS score, MAX(gs.score) AS maxscore, COUNT(gs.score) AS sessions, CONCAT(u.firstname, ' ', u.lastname) AS mdl_user_name
                   FROM {philosophers_gamesessions} AS gs
                   JOIN {user} AS u ON mdl_user=u.id
                  WHERE game = :game AND state = :state $andwhere
@@ -103,7 +103,7 @@ class scores extends external_api {
             foreach ($records as $record) {
                 $teacher = has_capability('mod/philosophers:manage', $ctx, $record->mdl_user);
                 if (!$teacher || $game->is_highscore_teachers()) {
-                    $dto = new score_dto($rank++, $record->score, $record->sessions, $record->mdl_user, $record->mdl_user_name, $teacher, $ctx);
+                    $dto = new score_dto($rank++, $record->score, $record->maxscore, $record->sessions, $record->mdl_user, $record->mdl_user_name, $teacher, $ctx);
                     $result[] = $dto->export($renderer);
                 }
             }
