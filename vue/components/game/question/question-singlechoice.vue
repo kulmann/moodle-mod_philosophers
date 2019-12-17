@@ -163,4 +163,7 @@
     ._question {
         font-size: 1.4em;
     }
+    .uk-card-default {
+        background-color: #f8f8f8;
+    }
 </style>

@@ -1,9 +1,9 @@
 <template lang="pug">
     .level(@click="selectLevel(level)", :style="getLevelStyles(level)", :class="{'_pointer': !isDone(level)}")
-        .uk-flex.uk-flex-middle.level(:style="textStyles").uk-box-shadow-hover-large
+        .uk-flex.uk-flex-middle.level(:style="overlayStyles").uk-box-shadow-hover-large
             .uk-flex.uk-width-expand
                 .uk-width-auto.level-content
-                    v-icon.uk-margin-small-left(v-if="getLevelIcon(level)", :name="getLevelIcon(level)", scale="1.5")
+                    v-icon.uk-margin-small-left(v-if="getLevelIcon(level)", :name="getLevelIcon(level)", :scale="2.5")
                 .uk-width-expand.level-content.uk-text-center
                     template(v-if="level.seen")
                         b {{ level.name }}
@@ -24,12 +24,18 @@
             game: Object,
         },
         computed: {
-            textStyles() {
+            overlayStyles() {
+                let styles = ['color: #fff;'];
                 let alpha = ((100 - this.game.level_tile_alpha) / 100.0);
-                let styles = [
-                    'background-color: rgba(0,0,0,' + alpha + ');',
-                    'color: #fff',
-                ];
+                if (this.level.finished && this.level.imageurl) {
+                    if (this.level.correct) {
+                        styles.push('background-color: rgba(1,50,32,0.9);');
+                    } else {
+                        styles.push('background-color: rgba(139,0,0,0.9);');
+                    }
+                } else {
+                    styles.push(('background-color: rgba(0,0,0,' + alpha + ');'));
+                }
                 return styles.join(' ');
             },
         },

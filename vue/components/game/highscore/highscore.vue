@@ -6,20 +6,23 @@
                     th.uk-table-shrink {{ strings.game_stats_rank }}
                     th.uk-table-auto {{ strings.game_stats_user }}
                     th.uk-table-shrink {{ strings.game_stats_score }}
+                    th.uk-table-shrink.uk-text-nowrap {{ strings.game_stats_maxscore }}
                     th.uk-table-shrink {{ strings.game_stats_sessions }}
             tbody
                 tr(v-for="score in mainScores", :key="score.mdl_user", :class="getScoreClasses(score)")
                     td {{ score.rank }}
                     td {{ score.mdl_user_name }}
                     td.uk-text-right(v-html="formatScore(score.score)")
+                    td.uk-text-right(v-html="formatScore(score.maxscore)")
                     td.uk-text-right {{ score.sessions }}
                 tr(v-if="loserScores.length > 0")
-                    td.uk-text-center(colspan="4")
+                    td.uk-text-center(colspan="5")
                         v-icon(name="ellipsis-v")
                 tr(v-for="score in loserScores", :key="score.mdl_user", :class="getScoreClasses(score)")
                     td {{ score.rank }}
                     td {{ score.mdl_user_name }}
                     td.uk-text-right(v-html="formatScore(score.score)")
+                    td.uk-text-right(v-html="formatScore(score.maxscore)")
                     td.uk-text-right {{ score.sessions }}
         infoAlert(v-else, :message="strings.game_stats_empty")
 </template>

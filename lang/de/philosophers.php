@@ -25,18 +25,18 @@
 defined('MOODLE_INTERNAL') || die();
 
 /* system */
-$string['modulename'] = 'Quiz der Weisen';
-$string['modulenameplural'] = '»Quiz der Weisen« Instanzen';
+$string['modulename'] = 'Genius - Das Spiel der Weisen';
+$string['modulenameplural'] = '»Genius - Das Spiel der Weisen« Instanzen';
 $string['modulename_help'] = 'Ein Quiz-Spiel, in dem Fragen aus Kategorien nach Schnelligkeit der Antwort bepunktet werden. Die Kursteilnehmer können mit Hilfe ihrer erreichten Punkte in eine Bestenliste sortiert werden.';
-$string['pluginadministration'] = 'Quiz der Weisen« Administration';
-$string['pluginname'] = 'Quiz der Weisen';
-$string['philosophers'] = 'Quiz der Weisen';
-$string['philosophers:addinstance'] = '»Quiz der Weisen« hinzufügen';
-$string['philosophers:submit'] = '»Quiz der Weisen« speichern';
-$string['philosophers:manage'] = '»Quiz der Weisen« verwalten';
-$string['philosophers:view'] = '»Quiz der Weisen« anzeigen';
+$string['pluginadministration'] = '»Genius - Das Spiel der Weisen« Administration';
+$string['pluginname'] = 'Genius - Das Spiel der Weisen';
+$string['philosophers'] = 'Genius - Das Spiel der Weisen';
+$string['philosophers:addinstance'] = '»Genius - Das Spiel der Weisen« hinzufügen';
+$string['philosophers:submit'] = '»Genius - Das Spiel der Weisen« speichern';
+$string['philosophers:manage'] = '»Genius - Das Spiel der Weisen« verwalten';
+$string['philosophers:view'] = '»Genius - Das Spiel der Weisen« anzeigen';
 $string['philosophersname'] = 'Name';
-$string['philosophersname_help'] = 'Bitte vergeben Sie einen Namen für dieses »Quiz der Weisen«.';
+$string['philosophersname_help'] = 'Bitte vergeben Sie einen Namen für dieses »Genius - Das Spiel der Weisen«.';
 $string['introduction'] = 'Beschreibung';
 $string['route_not_found'] = 'Die aufgerufene Seite gibt es nicht.';
 
@@ -110,7 +110,7 @@ $string['admin_level_lbl_category_please_select'] = 'Kategorie auswählen';
 $string['admin_level_msg_saving'] = 'Das Level wird gespeichert, bitte warten';
 
 /* game screen in vue app */
-$string['game_screen_title'] = 'Spiele »Quiz der Weisen«';
+$string['game_screen_title'] = 'Spiele »Genius - Das Spiel der Weisen«';
 $string['game_qtype_not_supported'] = 'Der Fragentyp »{$a}« wird nicht unterstützt.';
 $string['game_loading_question'] = 'Frage wird geladen';
 $string['game_loading_highscore'] = 'Bestenliste wird geladen';
@@ -138,4 +138,5 @@ $string['game_stats_all'] = 'Gesamt';
 $string['game_stats_rank'] = 'Platz';
 $string['game_stats_user'] = 'Nutzer';
 $string['game_stats_score'] = 'Punkte';
+$string['game_stats_maxscore'] = 'Beste Runde';
 $string['game_stats_sessions'] = 'Versuche';
