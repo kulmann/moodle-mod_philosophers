@@ -34,12 +34,6 @@ use mod_philosophers\model\level;
 
 defined('MOODLE_INTERNAL') || die();
 
-// implemented question types
-define('MOD_PHILOSOPHERS_QTYPE_SINGLE_CHOICE_DB', 'multichoice');
-define('MOD_PHILOSOPHERS_VALID_QTYPES_DB', [
-    MOD_PHILOSOPHERS_QTYPE_SINGLE_CHOICE_DB,
-]);
-
 // tile heights
 define('MOD_PHILOSOPHERS_LEVEL_TILE_HEIGHT_SMALL', 0);
 define('MOD_PHILOSOPHERS_LEVEL_TILE_HEIGHT_MEDIUM', 1);
