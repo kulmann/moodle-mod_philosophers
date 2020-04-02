@@ -58,6 +58,7 @@ function philosophers_supports($feature) {
         case FEATURE_BACKUP_MOODLE2:
         case FEATURE_COMPLETION_HAS_RULES:
         case FEATURE_MOD_INTRO:
+        case FEATURE_USES_QUESTIONS:
             return true;
         default:
             return null;
