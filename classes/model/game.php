@@ -75,6 +75,14 @@ class game extends abstract_model {
      */
     protected $highscore_teachers;
     /**
+     * @var int Number of rounds a user has to finish for successful completion.
+     */
+    protected $completionrounds;
+    /**
+     * @var int Total score a user has to reach for successful completion.
+     */
+    protected $completionpoints;
+    /**
      * @var bool Whether or not the levels should be shuffled in the level overview.
      */
     protected $shuffle_levels;
@@ -103,6 +111,8 @@ class game extends abstract_model {
         $this->question_chances = 0;
         $this->highscore_count = 5;
         $this->highscore_teachers = false;
+        $this->completionrounds = 0;
+        $this->completionpoints = 0;
         $this->shuffle_levels = false;
         $this->level_tile_height = MOD_PHILOSOPHERS_LEVEL_TILE_HEIGHT_MEDIUM;
         $this->level_tile_alpha = 50;
@@ -131,9 +141,45 @@ class game extends abstract_model {
         $this->question_chances = isset($data['question_chances']) ? $data['question_chances'] : 0;
         $this->highscore_count = isset($data['highscore_count']) ? $data['highscore_count'] : 5;
         $this->highscore_teachers = isset($data['highscore_teachers']) ? ($data['highscore_teachers'] == 1) : false;
+        $this->completionrounds = isset($data['completionrounds']) ? $data['completionrounds'] : 0;
+        $this->completionpoints = isset($data['completionpoints']) ? $data['completionpoints'] : 0;
         $this->shuffle_levels = isset($data['shuffle_levels']) ? ($data['shuffle_levels'] == 1) : false;
         $this->level_tile_height = isset($data['level_tile_height']) ? $data['level_tile_height'] : MOD_PHILOSOPHERS_LEVEL_TILE_HEIGHT_MEDIUM;
         $this->level_tile_alpha = isset($data['level_tile_alpha']) ? $data['level_tile_alpha'] : 50;
+    }
+
+    /**
+     * Calculates the total score of the given user.
+     *
+     * @param int $userid
+     * @return int
+     * @throws \dml_exception
+     */
+    public function calculate_total_score($userid) {
+        global $DB;
+        $sql = "SELECT SUM(score) AS score
+                  FROM {philosophers_gamesessions}
+                 WHERE game = :game AND state = :state AND mdl_user = :user";
+        $params = ['game' => $this->get_id(), 'state' => gamesession::STATE_FINISHED, 'user' => $userid];
+        $record = $DB->get_record_sql($sql, $params);
+        if ($record !== false) {
+            return $record->score;
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * Counts the number of finished gamesessions of the given user.
+     *
+     * @param int $userid
+     * @return int
+     * @throws \dml_exception
+     */
+    public function count_finished_gamesessions($userid) {
+        global $DB;
+        $sqlParams = ['game' => $this->get_id(), 'mdl_user' => $userid, 'state' => gamesession::STATE_FINISHED];
+        return $DB->count_records('philosophers_gamesessions', $sqlParams);
     }
 
     /**
@@ -323,6 +369,20 @@ class game extends abstract_model {
      */
     public function is_highscore_teachers(): bool {
         return $this->highscore_teachers;
+    }
+
+    /**
+     * @return int
+     */
+    public function get_completionrounds(): int {
+        return $this->completionrounds;
+    }
+
+    /**
+     * @return int
+     */
+    public function get_completionpoints(): int {
+        return $this->completionpoints;
     }
 
     /**

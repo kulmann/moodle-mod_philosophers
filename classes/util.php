@@ -112,7 +112,6 @@ class util {
      * @throws dml_exception
      */
     public static function get_game(cm_info $coursemodule): game {
-        global $DB;
         $game = new game();
         $game->load_data_by_id($coursemodule->instance);
         return $game;

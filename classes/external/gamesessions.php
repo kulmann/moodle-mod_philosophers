@@ -16,6 +16,7 @@
 
 namespace mod_philosophers\external;
 
+use core_completion\manager;
 use function array_filter;
 use function array_map;
 use function array_pop;
@@ -409,6 +410,12 @@ class gamesessions extends external_api {
         }
         if ($gamesession->get_answers_total() === $game->count_active_levels()) {
             $gamesession->set_state(gamesession::STATE_FINISHED);
+
+            // notify completion system about possible completion
+            $completion = new \completion_info($course);
+            if($completion->is_enabled($coursemodule)) {
+                $completion->update_state($coursemodule,COMPLETION_COMPLETE);
+            }
         }
         $gamesession->save();
 
