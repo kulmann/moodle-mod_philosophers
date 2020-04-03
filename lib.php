@@ -207,7 +207,6 @@ function philosophers_delete_instance($id) {
  * @throws moodle_exception
  */
 function philosophers_get_completion_state($course, $cm, $userid, $type) {
-    global $DB;
     list($course, $coursemodule) = get_course_and_cm_from_cmid($cm->id, 'philosophers');
     if (!($philosophers = util::get_game($coursemodule))) {
         throw new Exception("Can't find activity instance {$cm->instance}");
