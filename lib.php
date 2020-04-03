@@ -29,6 +29,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use core_completion\api;
 use mod_philosophers\model\gamesession;
 use mod_philosophers\model\level;
 
@@ -153,12 +154,30 @@ function philosophers_after_add_or_update(stdClass $philosophers) {
  *
  * @return boolean Success/Failure
  * @throws dml_exception
+ * @throws coding_exception
  */
 function philosophers_delete_instance($id) {
     global $DB;
+    if (!$philosophers = $DB->get_record('philosophers', ['id' => $id])) {
+        return false;
+    }
+    if (!$cm = get_coursemodule_from_instance('philosophers', $philosophers->id)) {
+        return false;
+    }
+    if (!$course = $DB->get_record('course', array('id'=>$cm->course))) {
+        return false;
+    }
+    $context = context_module::instance($cm->id);
+
+    // get rid of all files
+    $fs = get_file_storage();
+    $fs->delete_area_files($context->id);
+
+    // delete completion data
+    api::update_completion_date_event($cm->id, 'philosophers', $philosophers->id, null);
+
+    // now delete actual game data
     $result = true;
-    $philosophers = $DB->get_record('philosophers', ['id' => $id], '*', MUST_EXIST);
-    // game sessions, including chosen questions
     $gamesession_ids = $DB->get_fieldset_select('philosophers_gamesessions', 'id', 'game = :game', ['game' => $philosophers->id]);
     if ($gamesession_ids) {
         $result &= $DB->delete_records_list('philosophers_questions', 'gamesession', $gamesession_ids);
