@@ -32,6 +32,7 @@
 use core_completion\api;
 use mod_philosophers\model\gamesession;
 use mod_philosophers\model\level;
+use mod_philosophers\util;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -195,7 +196,7 @@ function philosophers_delete_instance($id) {
 
 /**
  * Obtains the automatic completion state for this forum based on any conditions
- * in forum settings.
+ * in main activity settings.
  *
  * @param object $course Course
  * @param object $cm Course-module
@@ -203,25 +204,25 @@ function philosophers_delete_instance($id) {
  * @param bool $type Type of comparison (or/and; can be used as return value if no conditions)
  * @return bool True if completed, false if not, $type if conditions not set.
  * @throws dml_exception
+ * @throws moodle_exception
  */
 function philosophers_get_completion_state($course, $cm, $userid, $type) {
     global $DB;
-
-    if (!($philosophers = $DB->get_record('philosophers', ['id' => $cm->instance]))) {
-        throw new Exception("Can't find philosophers {$cm->instance}");
+    list($course, $coursemodule) = get_course_and_cm_from_cmid($cm->id, 'philosophers');
+    if (!($philosophers = util::get_game($coursemodule))) {
+        throw new Exception("Can't find activity instance {$cm->instance}");
     }
     $result = $type;
-    if ($philosophers->completionrounds) {
-        $sqlParams = ['game' => $philosophers->id, 'mdl_user' => $userid, 'state' => gamesession::STATE_FINISHED];
-        $value = $philosophers->completionrounds <= $DB->count_records('philosophers_gamesessions', $sqlParams);
+    if ($philosophers->get_completionrounds()) {
+        $value = $philosophers->get_completionrounds() <= $philosophers->count_finished_gamesessions($userid);
         if ($type == COMPLETION_AND) {
             $result &= $value;
         } else {
             $result |= $value;
         }
     }
-    if ($philosophers->completionpoints) {
-        $value = $philosophers->completionpoints <= highscore_utils::calculate_score($philosophers, $userid);
+    if ($philosophers->get_completionpoints()) {
+        $value = $philosophers->get_completionpoints() <= $philosophers->calculate_total_score($userid);
         if ($type == COMPLETION_AND) {
             $result &= $value;
         } else {
