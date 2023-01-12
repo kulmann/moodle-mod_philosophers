@@ -127,12 +127,19 @@ class level extends abstract_model {
         list($cat_sql, $cat_params) = $DB->get_in_or_equal($mdl_category_ids);
 
         // build query for moodle question selection
+        //  * Only the most recent version of each question is returned.
         $sql = "
             SELECT q.id
-              FROM {question} q 
-        INNER JOIN {qtype_multichoice_options} qmo ON q.id=qmo.questionid
-             WHERE q.qtype = ? AND qmo.single = ? AND q.category $cat_sql 
-        ";
+            FROM {question} q 
+                JOIN {qtype_multichoice_options} qmo ON q.id=qmo.questionid
+                JOIN {question_versions} qv ON qv.questionid = q.id
+                JOIN {question_bank_entries} qbe ON qv.questionbankentryid = qbe.id
+                JOIN {question_categories} qc ON qc.id = qbe.questioncategoryid
+            WHERE (qv.version = (SELECT MAX(v.version)
+                                FROM {question_versions} v
+                                    JOIN {question_bank_entries} be ON be.id = v.questionbankentryid
+                                WHERE be.id = qbe.id))
+                                AND q.qtype = ? AND qmo.single = ? AND qc.id $cat_sql ";
         $params = \array_merge(["multichoice", 1], $cat_params);
 
         // Get all available questions.
